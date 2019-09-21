@@ -1,0 +1,19 @@
+{
+  "name": "friday",
+  "version": "0.1.0",
+  "description": "Let every day be like Friday.",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sqrthree/friday.git"
+  },
+  "author": "sqrtthree <imsqrtthree@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sqrthree/friday/issues"
+  },
+  "homepage": "https://github.com/sqrthree/friday#readme"
+}
