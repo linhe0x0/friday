@@ -5,7 +5,7 @@ import loggerGenerator from '../utilities/logger'
 
 const logger = loggerGenerator('friday:router')
 
-export default function mount() {
+export default function mount(): Function {
   const routerPath = path.resolve(process.cwd(), 'dist/router.js')
 
   let userRouter: Function
@@ -15,7 +15,8 @@ export default function mount() {
   } catch (err) {
     logger.warn('Routes of your app is missed.')
 
-    userRouter = () => {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    userRouter = function noop(): void {}
   }
 
   return userRouter

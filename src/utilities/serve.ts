@@ -40,7 +40,7 @@ export default async function serve(
 
   const [port, hostname] = endpoint
 
-  return new Promise((resolve, reject) => {
+  return new Promise(function listen(resolve, reject): void {
     server.listen(port, hostname, () => {
       hooks.afterStart()
 

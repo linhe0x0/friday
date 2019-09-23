@@ -6,6 +6,9 @@
   "plugins": ["@typescript-eslint", "prettier"],
   "extends": [
     "airbnb-base",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint",
     "plugin:prettier/recommended"

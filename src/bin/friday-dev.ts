@@ -129,7 +129,7 @@ const restartServer = (
     }
   })
 
-  return new Promise((resolve, reject) => {
+  return new Promise(function restart(resolve, reject): void {
     hooks.beforeClose()
 
     // Restart the server

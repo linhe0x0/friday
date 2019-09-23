@@ -15,16 +15,16 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
       ctx.app.emit('error', err, ctx)
     }
 
+    const response: ErrorResponse = {
+      message,
+    }
+
     switch (ctx.accepts(['json', 'html', 'text'])) {
       case 'text':
         ctx.type = 'text/plain'
         ctx.body = message
         break
       case 'json':
-        const response: ErrorResponse = {
-          message,
-        }
-
         if (err.errors) {
           response.errors = err.errors
         }

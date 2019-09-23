@@ -24,7 +24,7 @@ try {
   )
 }
 
-const info = function info(ctx: Koa.Context) {
+const info = function info(ctx: Koa.Context): void {
   const uptime = process.uptime()
   const name = config.has('app.name') ? config.get('app.name') : pkg.name
   const version = config.has('app.version')
@@ -39,11 +39,11 @@ const info = function info(ctx: Koa.Context) {
   }
 }
 
-const pong = function pong(ctx: Koa.Context) {
+const pong = function pong(ctx: Koa.Context): void {
   ctx.body = 'pong'
 }
 
-export default function helpfulRouter(router) {
+export default function helpfulRouter(router): void {
   router.get('/_info', info)
   router.get('/_ping', pong)
   router.get('/ping', pong)

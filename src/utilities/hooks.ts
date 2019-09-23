@@ -2,11 +2,12 @@ import _ from 'lodash'
 
 import loader from './loader'
 
-const noop = () => {}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = function noop(): void {}
 
 const hooksCache = {}
 
-export default function useHooks(file: string) {
+export default function useHooks(file: string): Record<string, Function> {
   let hooks = hooksCache[file]
 
   if (!hooks) {
