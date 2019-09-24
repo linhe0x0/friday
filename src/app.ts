@@ -57,7 +57,7 @@ app.use(router.allowedMethods())
  * Catch errors.
  */
 app.on('error', (err, ctx) => {
-  logger.error('server error:', err, ctx)
+  logger.error('server error:', err.message, ctx)
 })
 
 export default app

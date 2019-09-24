@@ -44,7 +44,7 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
           const redirectURL =
             ctx.url !== `/${ctx.status}` ? `/${ctx.status}` : '/'
 
-          ctx.redirect(`${redirectURL}?message=${message}`)
+          ctx.redirect(`${redirectURL}?message=${encodeURIComponent(message)}`)
         }
 
         break
