@@ -8,7 +8,7 @@ export default function loggerGenerator(
   level?: string,
   labels?: Record<string, string>
 ): pino.Logger {
-  const debug = config.get('debug')
+  const debug = config.has('debug')
     ? config.get('debug')
     : process.env.FRIDAY_ENV === 'development'
   let logLevel = debug ? 'trace' : 'info'
