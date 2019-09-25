@@ -10,9 +10,7 @@ export default function(ctx: Koa.Context, next: Function): Promise<void> {
     ctx.state.requestID ||
     uuidv3(Date.now().toString(), uuidv4())
 
-  ctx.logger = loggerGenerator('request', '', {
-    trackid: requestID,
-  })
+  ctx.logger = loggerGenerator(`request[${requestID}]`)
 
   return next()
 }
