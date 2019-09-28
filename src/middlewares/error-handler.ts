@@ -42,7 +42,13 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
           ctx.redirect('back')
         } else {
           const redirectURL =
-            ctx.url !== `/${ctx.status}` ? `/${ctx.status}` : '/'
+            ctx.path === `/${ctx.status}` ? '/' : `/${ctx.status}`
+
+          if (ctx.status === 404 && ctx.path === '/') {
+            ctx.type = 'text/plain'
+            ctx.body = http.STATUS_CODES[404]
+            return
+          }
 
           ctx.redirect(`${redirectURL}?message=${encodeURIComponent(message)}`)
         }
