@@ -46,6 +46,7 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
 
           if (ctx.status === 404 && ctx.path === '/') {
             ctx.type = 'text/plain'
+            // eslint-disable-next-line prefer-destructuring
             ctx.body = http.STATUS_CODES[404]
             return
           }
