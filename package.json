@@ -1,5 +1,5 @@
 {
-  "name": "friday",
+  "name": "@sqrtthree/friday",
   "version": "0.1.0",
   "description": "Let every day be like Friday.",
   "main": "./dist/main.js",
@@ -16,7 +16,8 @@
     "lint": "npm run type-check && eslint --ext ts ./src",
     "lint-with-fix": "eslint --ext ts --fix ./src",
     "type-check": "tsc --noEmit",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,17 @@
     "lodash": "^4.17.15",
     "pretty-ms": "^5.0.0",
     "uuid": "^3.3.3",
-    "yargs": "^14.0.0"
+    "pino": "^5.13.3",
+    "yargs": "^14.0.0",
+    "boxen": "^4.1.0",
+    "chalk": "^2.4.2",
+    "chokidar": "^3.1.1",
+    "clipboardy": "^2.1.0",
+    "consola": "^2.10.1",
+    "get-port": "^5.0.0",
+    "ip": "^1.1.5",
+    "pino-pretty": "^3.2.1",
+    "pretty-error": "^2.1.1"
   },
   "devDependencies": {
     "@sqrtthree/prettier-config": "^1.0.0",
@@ -52,22 +63,12 @@
     "@types/lodash": "^4.14.138",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
-    "boxen": "^4.1.0",
-    "chalk": "^2.4.2",
-    "chokidar": "^3.1.1",
-    "clipboardy": "^2.1.0",
-    "consola": "^2.10.1",
     "eslint": "^6.4.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.1",
-    "get-port": "^5.0.0",
-    "ip": "^1.1.5",
-    "pino": "^5.13.3",
-    "pino-pretty": "^3.2.1",
     "prettier": "^1.18.2",
-    "pretty-error": "^2.1.1",
     "typescript": "^3.6.3"
   }
 }
