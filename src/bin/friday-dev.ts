@@ -37,7 +37,7 @@ const args = yargs
     type: 'string',
   })
   .example(
-    'micro -l tcp://hostname:1234',
+    'friday -l tcp://hostname:1234',
     'for TCP (traditional host/port) endpoints'
   ).argv
 
