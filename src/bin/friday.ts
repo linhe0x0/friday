@@ -30,7 +30,7 @@ const args = yargs
   ).argv
 
 const { host, port, listen } = args
-const defaultPort = 3000
+const defaultPort = parseInt(process.env.PORT || '3000', 10) || 3000
 const defaultHost = '127.0.0.1'
 
 process.env.FRIDAY_ENV = 'production'
