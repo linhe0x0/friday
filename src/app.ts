@@ -10,6 +10,7 @@ import errorHandlerMiddleware from './middlewares/error-handler'
 import loggerMiddleware from './middlewares/logger'
 import requestIDMiddleware from './middlewares/request-id'
 import router from './router/router'
+import { getOptionalConfig } from './services/config'
 import loggerGenerator from './utilities/logger'
 
 const logger = loggerGenerator('friday')
@@ -17,7 +18,15 @@ const logger = loggerGenerator('friday')
 const app = new Koa()
 
 app.use(errorHandlerMiddleware)
-app.use(bodyParser())
+
+/**
+ * Mount body-parser middleware.
+ */
+const bodyParserOptions = getOptionalConfig<bodyParser.Options>('bodyParser')
+
+// Assign a new value due to the value from config.get() is immutable.
+app.use(bodyParser(_.assign({}, bodyParserOptions)))
+
 app.use(requestIDMiddleware)
 app.use(loggerMiddleware)
 
