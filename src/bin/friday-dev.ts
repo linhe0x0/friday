@@ -187,7 +187,7 @@ getPort({
     const watcher = watch(
       toWatch,
       '',
-      async (_event: string, filepath: string) => {
+      _.debounce(async (_event: string, filepath: string) => {
         try {
           // eslint-disable-next-line no-param-reassign
           curretServer = await restartServer(watcher, filepath, curretServer)
@@ -195,7 +195,7 @@ getPort({
           consola.error('Failed to restart the server.', err)
           process.exit(1)
         }
-      }
+      }, 200)
     )
 
     let message = chalk.green('Friday is running:')
