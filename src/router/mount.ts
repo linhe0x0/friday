@@ -13,7 +13,10 @@ export default function mount(): Function {
   try {
     userRouter = loader(routerPath)
   } catch (err) {
-    logger.warn('Failed to load your routes:', err.message)
+    logger.warn(
+      `Failed to load your routes from expect router file [${routerPath}]:`,
+      err.message
+    )
     logger.warn('Routes of your app is missed.')
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
