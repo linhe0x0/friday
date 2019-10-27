@@ -12,6 +12,7 @@ import _ from 'lodash'
 import path from 'path'
 import yargs from 'yargs'
 
+import { Endpoint, EndpointProtocol } from '../types/friday'
 import useHooks from '../utilities/hooks'
 import isValidPort from '../utilities/is-valid-port'
 import parseEndpoint from '../utilities/parse-endpoint'
@@ -36,9 +37,21 @@ const args = yargs
     describe: 'specify a URI endpoint on which to listen',
     type: 'string',
   })
+  .option('unix-socket', {
+    alias: 'n',
+    describe: 'path to a UNIX socket',
+    type: 'string',
+  })
   .example(
-    'friday -l tcp://hostname:1234',
-    'for TCP (traditional host/port) endpoints'
+    `
+  For TCP (traditional host/port) endpoint:
+
+    $ friday -l tcp://hostname:1234
+
+  For UNIX domain socket endpoint:
+
+    $ friday -l unix:/path/to/socket.sock
+`
   ).argv
 
 const { host, port, listen } = args
@@ -54,25 +67,30 @@ if (isHostOrPortProvided && listen) {
   process.exit(1)
 }
 
-const endpoint: [number, string] = listen
-  ? parseEndpoint(listen)
-  : [defaultPort, defaultHost]
-
 if (port) {
   if (!isValidPort(port)) {
     console.error(`Port option must be a number. Got: ${port}`)
     process.exit(1)
   }
-
-  endpoint[0] = port
 }
 
-if (args.host) {
-  endpoint[1] = args.host
+const endpoint: Endpoint = listen
+  ? parseEndpoint(listen)
+  : {
+      protocol: EndpointProtocol.HTTP,
+      host,
+      port,
+    }
+
+if (endpoint.protocol !== EndpointProtocol.UNIX) {
+  _.defaults(endpoint, {
+    host: defaultHost,
+    port: defaultPort,
+  })
 }
 
 const entryFile = resolveEntry(args._[0])
-const originalPort = endpoint[0]
+const originalPort = endpoint.port
 
 const hooks = useHooks(entryFile)
 
@@ -151,16 +169,17 @@ const restartServer = (
 }
 
 getPort({
-  port: endpoint[0],
+  port: endpoint.port,
 })
   .then(result => {
-    endpoint[0] = result
+    endpoint.port = result
 
     return serve(endpoint, entryFile)
   })
   .then(curretServer => {
-    const [usedPort, hostname] = endpoint
     const { isTTY } = process.stdout
+    const usedPort = endpoint.port
+    const isUnixProtocol = endpoint.protocol === EndpointProtocol.UNIX
     const ipAddress = ip.address()
 
     const toWatch = path.dirname(entryFile)
@@ -189,13 +208,16 @@ getPort({
 
     message += '\n\n'
 
-    const localURL = `http://${
-      hostname === '0.0.0.0' ? 'localhost' : hostname
-    }:${usedPort}`
+    const localURL = isUnixProtocol
+      ? endpoint.host
+      : `http://${endpoint.host}:${usedPort}`
     const networkURL = `http://${ipAddress}:${usedPort}`
 
     message += `• ${chalk.bold('Local:           ')} ${localURL}\n`
-    message += `• ${chalk.bold('On Your Network: ')} ${networkURL}\n\n`
+
+    if (!isUnixProtocol) {
+      message += `• ${chalk.bold('On Your Network: ')} ${networkURL}\n\n`
+    }
 
     if (isTTY) {
       const copied = copyToClipboard(localURL)

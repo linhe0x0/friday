@@ -1,15 +1,23 @@
+import _ from 'lodash'
 import { URL } from 'url'
 
-export default function parseEndpoint(endpoint: string): [number, string] {
+import { Endpoint, EndpointProtocol } from '../types/friday'
+
+export default function parseEndpoint(endpoint: string): Endpoint {
   const url = new URL(endpoint)
 
-  if (url.protocol !== 'tcp:' && url.protocol !== 'http:') {
+  if (!_.includes(['tcp:', 'http:', 'unix:'], url.protocol)) {
     throw new Error(
       `Unknown --listen endpoint scheme (protocol): ${url.protocol}`
     )
   }
 
-  const port = parseInt(url.port, 10) || 3000
+  const host = url.protocol === 'unix:' ? url.pathname : url.hostname
+  const port = url.port ? parseInt(url.port, 10) : undefined
 
-  return [port, url.hostname]
+  return {
+    protocol: url.protocol as EndpointProtocol,
+    host,
+    port,
+  }
 }

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+import _ from 'lodash'
 import yargs from 'yargs'
 
+import { Endpoint, EndpointProtocol } from '../types/friday'
 import isValidPort from '../utilities/is-valid-port'
 import parseEndpoint from '../utilities/parse-endpoint'
 import resolveEntry from '../utilities/resolve-entry'
@@ -24,9 +26,21 @@ const args = yargs
     describe: 'specify a URI endpoint on which to listen',
     type: 'string',
   })
+  .option('unix-socket', {
+    alias: 'n',
+    describe: 'path to a UNIX socket',
+    type: 'string',
+  })
   .example(
-    'friday -l tcp://hostname:1234',
-    'for TCP (traditional host/port) endpoints'
+    `
+  For TCP (traditional host/port) endpoint:
+
+    $ friday -l tcp://hostname:1234
+
+  For UNIX domain socket endpoint:
+
+    $ friday -l unix:/path/to/socket.sock
+`
   ).argv
 
 const { host, port, listen } = args
@@ -42,38 +56,41 @@ if (isHostOrPortProvided && listen) {
   process.exit(1)
 }
 
-const endpoint: [number?, string?] = listen ? parseEndpoint(listen) : []
-
 if (port) {
   if (!isValidPort(port)) {
     console.error(`Port option must be a number. Got: ${port}`)
     process.exit(1)
   }
-
-  endpoint.push(port || defaultPort)
 }
 
-if (args.host) {
-  endpoint.push(args.host)
-}
+const endpoint: Endpoint = listen
+  ? parseEndpoint(listen)
+  : {
+      protocol: EndpointProtocol.HTTP,
+      host,
+      port,
+    }
 
-if (endpoint.length === 0) {
-  endpoint.push(defaultPort, defaultHost)
-}
-
-if (endpoint.length === 1) {
-  endpoint.push(defaultHost)
+if (endpoint.protocol !== EndpointProtocol.UNIX) {
+  _.defaults(endpoint, {
+    host: defaultHost,
+    port: defaultPort,
+  })
 }
 
 const entryFile = resolveEntry(args._[0])
 
 serve(endpoint, entryFile)
   .then(() => {
-    const [usedPort, hostname] = endpoint
+    let message = 'Server is running.'
 
-    process.stdout.write(
-      `Server is running at http://${hostname}:${usedPort}.\n`
-    )
+    if (endpoint.protocol === EndpointProtocol.UNIX) {
+      message = `Server is running at ${endpoint.host}.\n`
+    } else {
+      message = `Server is running at ${endpoint.protocol}//${endpoint.host}:${endpoint.port}.\n`
+    }
+
+    process.stdout.write(message)
   })
   .catch(err => {
     console.error(err)

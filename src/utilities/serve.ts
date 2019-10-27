@@ -1,11 +1,12 @@
 import consola from 'consola'
 import http from 'http'
 
+import { Endpoint, EndpointProtocol } from '../types/friday'
 import useHooks from './hooks'
 import loader from './loader'
 
 export default async function serve(
-  endpoint: [number?, string?],
+  endpoint: Endpoint,
   entryFile: string
 ): Promise<http.Server> {
   let app
@@ -38,14 +39,25 @@ export default async function serve(
 
   const server = http.createServer(application.callback())
 
-  const [port, hostname] = endpoint
-
   return new Promise(function listen(resolve, reject): void {
-    server.listen(port, hostname, () => {
+    const listenCallback = (): void => {
       hooks.afterStart()
 
       resolve(server)
-    })
+    }
+
+    if (endpoint.protocol === EndpointProtocol.UNIX) {
+      /**
+       * UNIX domain socket endpoint.
+       */
+      const path = endpoint.host
+
+      server.listen(path, listenCallback)
+    } else {
+      const { host, port } = endpoint
+
+      server.listen(port, host, listenCallback)
+    }
 
     server.on('error', err => {
       reject(err)
