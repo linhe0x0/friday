@@ -11,10 +11,14 @@ import requestIDMiddleware from './middlewares/request-id'
 import router from './router/router'
 import { getOptionalConfig } from './services/config'
 import loggerGenerator from './utilities/logger'
+import validateConfig from './utilities/validate-config'
 
 const logger = loggerGenerator('friday')
 
 const app = new Koa()
+
+// Check if the config schema file exists and validate user configurations.
+validateConfig()
 
 app.use(errorHandlerMiddleware)
 

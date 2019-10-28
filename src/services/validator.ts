@@ -1,5 +1,6 @@
 import Ajv from 'ajv'
 import ajvErrors from 'ajv-errors'
+import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
 
@@ -25,7 +26,11 @@ export default function validator(
 
   const err: TypeValidateError = new Error('Schema validation error')
 
-  err.errors = validate.errors
+  err.errors = _.map(validate.errors, item => {
+    item.dataPath = `data${item.dataPath.replace(/\//g, '.')}`
+
+    return item
+  })
 
   throw err
 }
