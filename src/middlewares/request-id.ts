@@ -8,7 +8,7 @@ export default function(ctx: Koa.Context, next: Function): Promise<void> {
 
   ctx.state.requestID = requestID
 
-  ctx.set('x-request-id', requestID)
+  ctx.set('X-Request-Id', requestID)
 
   return next()
 }
