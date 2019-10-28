@@ -3,14 +3,17 @@ import _ from 'lodash'
 import os from 'os'
 import pino from 'pino'
 
+import { getConfigWithDefault } from '../services/config'
+
 export default function loggerGenerator(
   name: string,
   level?: string,
   labels?: Record<string, string>
 ): pino.Logger {
-  const debug = config.has('debug')
-    ? config.get('debug')
-    : process.env.FRIDAY_ENV === 'development'
+  const debug = getConfigWithDefault(
+    'debug',
+    process.env.FRIDAY_ENV === 'development'
+  )
   let logLevel = debug ? 'trace' : 'info'
 
   if (config.has('logger.level')) {

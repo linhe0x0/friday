@@ -1,8 +1,8 @@
-import config from 'config'
 import Koa from 'koa'
 import path from 'path'
 import prettyMilliseconds from 'pretty-ms'
 
+import { getConfigWithDefault } from '../services/config'
 import { PkgInfo } from '../types/pkg'
 import loader from '../utilities/loader'
 import loggerGenerator from '../utilities/logger'
@@ -26,10 +26,8 @@ try {
 
 const info = function info(ctx: Koa.Context): void {
   const uptime = process.uptime()
-  const name = config.has('app.name') ? config.get('app.name') : pkg.name
-  const version = config.has('app.version')
-    ? config.get('app.version')
-    : pkg.version
+  const name = getConfigWithDefault('app.name', pkg.name)
+  const version = getConfigWithDefault('app.version', pkg.version)
 
   ctx.body = {
     name,

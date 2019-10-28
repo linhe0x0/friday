@@ -1,4 +1,3 @@
-import config from 'config'
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
 import serve from 'koa-static'
@@ -33,7 +32,7 @@ app.use(loggerMiddleware)
 /**
  * Use static middleware.
  */
-const staticConfig = config.has('static') ? config.get('static') : null
+const staticConfig = getOptionalConfig<Record<string, string>>('static')
 let staticRootDirectory = ''
 
 if (staticConfig) {
