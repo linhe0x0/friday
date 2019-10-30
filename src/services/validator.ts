@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
 
-export default function validator(
+export function validate(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   schema: Record<string, any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,4 +33,8 @@ export default function validator(
   })
 
   throw err
+}
+
+export default {
+  validate,
 }

@@ -25,7 +25,7 @@ export default function validate() {
   }
 
   try {
-    validator(schema, configurations)
+    validator.validate(schema, configurations)
   } catch (err) {
     logger.error(`Invalid configurations from ${configDir}:`)
 
