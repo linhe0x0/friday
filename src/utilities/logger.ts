@@ -24,6 +24,10 @@ export default function loggerGenerator(
     logLevel = level
   }
 
+  if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'testing') {
+    logLevel = 'silent'
+  }
+
   const baseLabels = _.assign(
     {
       hostname: os.hostname(),
