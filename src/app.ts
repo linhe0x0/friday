@@ -1,5 +1,6 @@
 import Koa from 'koa'
 import bodyParser from 'koa-bodyparser'
+import helmet from 'koa-helmet'
 import serve from 'koa-static'
 import _ from 'lodash'
 import path from 'path'
@@ -21,6 +22,13 @@ const app = new Koa()
 validateConfig()
 
 app.use(errorHandlerMiddleware)
+
+/**
+ * Help secure the app with various HTTP headers by helmet.
+ */
+const helmetOptions = getOptionalConfig('helmet')
+
+app.use(helmet(helmetOptions))
 
 /**
  * Mount body-parser middleware.
