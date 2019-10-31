@@ -17,8 +17,8 @@ export function validate(
 
   ajvErrors(ajv)
 
-  const validate = ajv.compile(schema)
-  const isValid = validate(data)
+  const validator = ajv.compile(schema)
+  const isValid = validator(data)
 
   if (isValid) {
     return
@@ -26,7 +26,7 @@ export function validate(
 
   const err: TypeValidateError = new Error('Schema validation error')
 
-  err.errors = _.map(validate.errors, item => {
+  err.errors = _.map(validator.errors, item => {
     item.dataPath = `data${item.dataPath.replace(/\//g, '.')}`
 
     return item
