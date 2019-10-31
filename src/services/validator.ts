@@ -27,7 +27,7 @@ export function validate(
   const err: TypeValidateError = new Error('Schema validation error')
 
   err.errors = _.map(validator.errors, item => {
-    item.dataPath = `data${item.dataPath.replace(/\//g, '.')}`
+    item.dataPath = item.dataPath.replace(/\//g, '.')
 
     return item
   })
