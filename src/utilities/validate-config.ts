@@ -2,13 +2,13 @@ import config from 'config'
 import _ from 'lodash'
 import path from 'path'
 
-import validator from '../services/validator'
+import { validate } from '../services/validator'
 import loader from './loader'
 import loggerGenerator from './logger'
 
 const logger = loggerGenerator('validate-config')
 
-export default function validate() {
+export default function validateConfig(): void {
   const configDir = config.util.getEnv('NODE_CONFIG_DIR')
   const shemaFilePath = path.join(configDir, 'schema.json')
   const configurations = config.util.loadFileConfigs()
@@ -25,7 +25,7 @@ export default function validate() {
   }
 
   try {
-    validator.validate(schema, configurations)
+    validate(schema, configurations)
   } catch (err) {
     logger.error(`Invalid configurations from ${configDir}:`)
 
