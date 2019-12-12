@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-export default function resolveEntry(targetPath: string): string {
+export default function resolveEntry(targetPath = ''): string {
   let filepath = targetPath
 
   if (!filepath) {
