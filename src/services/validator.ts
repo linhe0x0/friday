@@ -24,7 +24,10 @@ export function validate(
     return
   }
 
-  const err: TypeValidateError = new Error('Schema validation error')
+  const err: Partial<TypeValidateError> = new Error('Schema validation error')
+
+  err.status = 400
+  err.statusCode = 400
 
   err.errors = _.map(validator.errors, item => {
     const dataPath = item.dataPath.replace(/\//g, '.')

@@ -9,8 +9,11 @@ export interface ErrorResponse {
 
 export interface KoaError extends Error {
   status: number
+  statusCode: number
 }
 
 export interface TypeValidateError extends Error {
-  errors?: ErrorObject[] | null | undefined
+  status: number
+  statusCode: number
+  errors: ErrorObject[] | null | undefined
 }

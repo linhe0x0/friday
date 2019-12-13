@@ -7,7 +7,7 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
   try {
     await next()
   } catch (err) {
-    ctx.status = err.status || 500
+    ctx.status = err.status || err.statusCode || 500
 
     const message = err.message || http.STATUS_CODES[ctx.status]
 

@@ -58,7 +58,7 @@ const logResponse = (ctx: Koa.Context, duration: number): void => {
 }
 
 const logError = (err: KoaError): void => {
-  const status = err.status || 500
+  const status = err.status || err.statusCode || 500
 
   newLine()
 
