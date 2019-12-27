@@ -54,7 +54,11 @@ const logResponse = (ctx: Koa.Context, duration: number): void => {
 
   newLine()
 
-  consola.log(ctx.body)
+  const isHTMLResponse = ctx.accepts(['json', 'html', 'text']) === 'html'
+
+  if (!isHTMLResponse) {
+    consola.log(ctx.body)
+  }
 }
 
 const logError = (err: KoaError): void => {
