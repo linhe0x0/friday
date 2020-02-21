@@ -20,3 +20,8 @@ export {
   getOptionalConfig,
   getConfigWithDefault,
 } from './services/config'
+
+/**
+ * Errors
+ */
+export { default as errors } from './services/errors'
