@@ -3,10 +3,10 @@ import ajvErrors from 'ajv-errors'
 import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
+import { ValidateSchema } from '../types/validator'
 
 export function validate(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  schema: Record<string, any>,
+  schema: ValidateSchema,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>
 ): void {
