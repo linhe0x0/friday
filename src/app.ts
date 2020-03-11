@@ -9,6 +9,7 @@ import debugMiddleware from './middlewares/debug'
 import errorHandlerMiddleware from './middlewares/error-handler'
 import loggerMiddleware from './middlewares/logger'
 import requestIDMiddleware from './middlewares/request-id'
+import outputRoutes from './router/output-routes'
 import router from './router/router'
 import { getOptionalConfig } from './services/config'
 import isDebug from './utilities/is-debug'
@@ -33,6 +34,9 @@ if (isDebugMode) {
   )
   logger.debug('  - using env:    export NODE_ENV=production')
   logger.debug('  - using config: debug=false')
+  logger.debug('')
+
+  outputRoutes(router)
 }
 
 // Check if the config schema file exists and validate user configurations.
