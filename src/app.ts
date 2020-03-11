@@ -11,12 +11,29 @@ import loggerMiddleware from './middlewares/logger'
 import requestIDMiddleware from './middlewares/request-id'
 import router from './router/router'
 import { getOptionalConfig } from './services/config'
+import isDebug from './utilities/is-debug'
 import loggerGenerator from './utilities/logger'
 import validateConfig from './utilities/validate-config'
 
 const logger = loggerGenerator('friday')
 
 const app = new Koa()
+
+if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
+  logger.warn(
+    `Running in "${process.env.NODE_ENV}" env. you can remove this warning by export NODE_ENV=production`
+  )
+}
+
+const isDebugMode = isDebug()
+
+if (isDebugMode) {
+  logger.debug(
+    `Running in "debug" mode. It's better to switch to "production" mode if you are in production environment.`
+  )
+  logger.debug('  - using env:    export NODE_ENV=production')
+  logger.debug('  - using config: debug=false')
+}
 
 // Check if the config schema file exists and validate user configurations.
 validateConfig()
