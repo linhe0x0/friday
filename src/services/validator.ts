@@ -1,5 +1,6 @@
 import Ajv from 'ajv'
 import ajvErrors from 'ajv-errors'
+import Koa from 'koa'
 import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
@@ -40,6 +41,16 @@ export function validate(
   throw err
 }
 
+export function validateCtxPayload(
+  schema: ValidateSchema,
+  ctx: Koa.Context
+): void {
+  const payload = _.pick({}, ctx.request.body, ctx.query, ctx.params)
+
+  return validate(schema, payload)
+}
+
 export default {
   validate,
+  validateCtxPayload,
 }
