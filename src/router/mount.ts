@@ -1,3 +1,5 @@
+import fs from 'fs'
+import _ from 'lodash'
 import path from 'path'
 
 import loader from '../utilities/loader'
@@ -7,21 +9,39 @@ const logger = loggerGenerator('friday:router')
 const noop = (): void => {}
 
 export default function mount(): Function {
-  const routerPath = path.resolve(process.cwd(), 'dist/router.js')
+  let userRouter: Function = noop
+  const targetPathList = [
+    path.resolve(process.cwd(), 'dist/router.js'),
+    path.resolve(process.cwd(), 'dist/router/index.js'),
+  ]
+  let routerPath = ''
 
-  let userRouter: Function
+  _.forEach(targetPathList, item => {
+    try {
+      fs.accessSync(item, fs.constants.F_OK)
+
+      routerPath = item
+
+      // exit iteration early
+      return false
+    } catch (_err) {
+      // go to next
+      return true
+    }
+  })
 
   try {
+    if (routerPath === '') {
+      throw new Error(`No such file or directory`)
+    }
+
     userRouter = loader(routerPath)
   } catch (err) {
     logger.warn(
-      `Failed to load your routes from expect router file [${routerPath}]:`,
+      `Failed to load your routes from expect router file: [${targetPathList}]:`,
       err.message
     )
     logger.warn('Routes of your app is missed.')
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    userRouter = noop
   }
 
   if (typeof userRouter !== 'function') {
