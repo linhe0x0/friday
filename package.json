@@ -33,6 +33,7 @@
     "node": ">=10"
   },
   "dependencies": {
+    "@koa/cors": "^3.0.0",
     "@koa/router": "^8.0.2",
     "ajv": "^6.10.2",
     "ajv-errors": "^1.0.1",

@@ -5,6 +5,8 @@ import serve from 'koa-static'
 import _ from 'lodash'
 import path from 'path'
 
+import cors from '@koa/cors'
+
 import debugMiddleware from './middlewares/debug'
 import errorHandlerMiddleware from './middlewares/error-handler'
 import loggerMiddleware from './middlewares/logger'
@@ -22,7 +24,8 @@ const app = new Koa()
 
 if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
   logger.warn(
-    `Running in "${process.env.NODE_ENV || 'development'}" env. you can remove this warning by export NODE_ENV=production`
+    `Running in "${process.env.NODE_ENV ||
+      'development'}" env. you can remove this warning by export NODE_ENV=production`
   )
 }
 
@@ -80,6 +83,15 @@ if (!staticRootDirectory) {
 const staticOptions = _.defaults(_.get(staticConfig, 'options'), {})
 
 app.use(serve(staticRootDirectory, staticOptions))
+
+/**
+ * Use cors middleware
+ */
+const corsConfig = getOptionalConfig('cors')
+
+if (isDebugMode || corsConfig) {
+  app.use(cors(corsConfig))
+}
 
 /**
  * Use debug middleware when running in development env.
