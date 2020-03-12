@@ -22,7 +22,7 @@ const app = new Koa()
 
 if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
   logger.warn(
-    `Running in "${process.env.NODE_ENV}" env. you can remove this warning by export NODE_ENV=production`
+    `Running in "${process.env.NODE_ENV || 'development'}" env. you can remove this warning by export NODE_ENV=production`
   )
 }
 
