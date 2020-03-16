@@ -4,7 +4,7 @@ import loggerGenerator from '../utilities/logger'
 
 const logger = loggerGenerator('friday:router')
 
-export default function outputRoutes(router) {
+export default function outputRoutes(router): void {
   logger.debug('Served routes:')
 
   router.stack.forEach(item => {
