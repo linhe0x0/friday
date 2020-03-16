@@ -10,7 +10,7 @@ export { default as getServer } from './utilities/get-server'
  * Validator
  */
 export { default as validator } from './services/validator'
-export { validate, validateCtxPayload } from './services/validator'
+export { validate } from './services/validator'
 
 /**
  * Config

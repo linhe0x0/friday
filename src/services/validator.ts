@@ -1,6 +1,5 @@
 import Ajv from 'ajv'
 import ajvErrors from 'ajv-errors'
-import Koa from 'koa'
 import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
@@ -9,7 +8,9 @@ import { ValidateSchema } from '../types/validator'
 export function validate(
   schema: ValidateSchema,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: Record<string, any>
+  data: Record<string, any>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ...payload: Record<string, any>[]
 ): void {
   const ajv = new Ajv({
     allErrors: true,
@@ -19,7 +20,8 @@ export function validate(
   ajvErrors(ajv)
 
   const validator = ajv.compile(schema)
-  const isValid = validator(data)
+  const target = _.assign({}, data, ...payload)
+  const isValid = validator(target)
 
   if (isValid) {
     return
@@ -41,16 +43,6 @@ export function validate(
   throw err
 }
 
-export function validateCtxPayload(
-  schema: ValidateSchema,
-  ctx: Koa.Context
-): void {
-  const payload = _.pick({}, ctx.request.body, ctx.query, ctx.params)
-
-  return validate(schema, payload)
-}
-
 export default {
   validate,
-  validateCtxPayload,
 }
