@@ -23,6 +23,14 @@
         "peerDependencies": false
       }
     ],
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "import/extensions": [
+      "error",
+      "always",
+      {
+        "ts": "never",
+        "js": "never"
+      }
+    ]
   }
 }

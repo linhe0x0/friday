@@ -6,7 +6,8 @@ import loader from '../utilities/loader'
 import loggerGenerator from '../utilities/logger'
 
 const logger = loggerGenerator('friday:router')
-const noop = (): void => {}
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = function noop(): void {}
 
 export default function mount(): Function {
   let userRouter: Function = noop
