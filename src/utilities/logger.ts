@@ -18,6 +18,10 @@ export default function loggerGenerator(
     logLevel = config.get('logger.level')
   }
 
+  if (process.env.LOGGER_LEVEL) {
+    logLevel = process.env.LOGGER_LEVEL
+  }
+
   if (level) {
     logLevel = level
   }

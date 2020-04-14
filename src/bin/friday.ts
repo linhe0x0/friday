@@ -31,6 +31,11 @@ const args = yargs
     describe: 'path to a UNIX socket',
     type: 'string',
   })
+  .option('silent', {
+    alias: 's',
+    describe: 'disable all output',
+    type: 'boolean',
+  })
   .example(
     `
   For TCP (traditional host/port) endpoint:
@@ -43,11 +48,15 @@ const args = yargs
 `
   ).argv
 
-const { host, port, listen } = args
+const { host, port, listen, silent } = args
 const defaultPort = parseInt(process.env.PORT || '3000', 10) || 3000
 const defaultHost = '0.0.0.0'
 
 process.env.FRIDAY_ENV = 'production'
+
+if (silent) {
+  process.env.LOGGER_LEVEL = 'silent'
+}
 
 const isHostOrPortProvided = !!(host || port)
 
