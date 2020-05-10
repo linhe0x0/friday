@@ -52,6 +52,10 @@ const { host, port, listen, silent } = args
 const defaultPort = parseInt(process.env.PORT || '3000', 10) || 3000
 const defaultHost = '0.0.0.0'
 
+if (_.isNil(process.env.NODE_ENV)) {
+  process.env.NODE_ENV = 'production'
+}
+
 process.env.FRIDAY_ENV = 'production'
 
 if (silent) {
