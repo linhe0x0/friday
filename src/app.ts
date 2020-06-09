@@ -14,6 +14,7 @@ import requestIDMiddleware from './middlewares/request-id'
 import outputRoutes from './router/output-routes'
 import router from './router/router'
 import { getOptionalConfig } from './services/config'
+import { validate } from './services/validator'
 import isDebug from './utilities/is-debug'
 import loggerGenerator from './utilities/logger'
 import validateConfig from './utilities/validate-config'
@@ -44,6 +45,11 @@ if (isDebugMode) {
 
 // Check if the config schema file exists and validate user configurations.
 validateConfig()
+
+/**
+ * Extends properties or methods to ctx to be used across the entire app
+ */
+app.context.validate = validate
 
 app.use(errorHandlerMiddleware)
 
