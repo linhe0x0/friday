@@ -11,12 +11,14 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
     ctx.status = err.status || err.statusCode || 500
 
     const message = err.message || http.STATUS_CODES[ctx.status]
+    const { requestID } = ctx.state
 
     if (ctx.status >= 500) {
       ctx.app.emit('error', err, ctx)
     }
 
     const response: ErrorResponse = {
+      requestID,
       message,
     }
 
