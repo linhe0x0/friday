@@ -1,6 +1,7 @@
 import { ErrorObject } from 'ajv'
 
 export interface ErrorResponse {
+  code?: number | string
   message: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any

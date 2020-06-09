@@ -1,5 +1,6 @@
 import http from 'http'
 import Koa from 'koa'
+import _ from 'lodash'
 
 import { ErrorResponse } from '../types/errors'
 
@@ -19,16 +20,24 @@ export default async function(ctx: Koa.Context, next: Function): Promise<void> {
       message,
     }
 
+    const errorCode = err.code || err.errorCode
+
+    if (errorCode) {
+      response.code = errorCode
+    }
+
+    if (err.errors) {
+      response.errors = err.errors
+    }
+
+    _.assign(response, err.payload, err.extra)
+
     switch (ctx.accepts(['json', 'html', 'text'])) {
       case 'text':
         ctx.type = 'text/plain'
         ctx.body = message
         break
       case 'json':
-        if (err.errors) {
-          response.errors = err.errors
-        }
-
         ctx.body = response
         break
       case 'html':
