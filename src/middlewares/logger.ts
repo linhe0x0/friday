@@ -35,10 +35,22 @@ export default function(ctx: Koa.Context, next: Function): Promise<void> {
       })
     }
 
+    const mixin = (): Record<string, string> => {
+      const extra: Record<string, string> = {}
+      const { userID } = ctx.state
+
+      if (userID) {
+        extra.traceUserID = userID
+      }
+
+      return extra
+    }
+
     ctx.logger = loggerGenerator(
       `[${ctx.method}]${ctx.url}`,
       undefined,
-      extraLabels
+      extraLabels,
+      mixin
     )
   }
 

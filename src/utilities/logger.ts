@@ -8,7 +8,8 @@ import isDebug from './is-debug'
 export default function loggerGenerator(
   name: string,
   level?: string,
-  labels?: Record<string, string>
+  labels?: Record<string, string>,
+  mixin?: () => Record<string, string>
 ): pino.Logger {
   const isDebugMode = isDebug()
 
@@ -38,10 +39,14 @@ export default function loggerGenerator(
     labels
   )
 
+  const mixinFn = mixin || ((): Record<string, string> => ({}))
+
   const logger = pino({
     name,
     level: logLevel,
     base: baseLabels,
+    mixin: mixinFn,
+    nestedKey: 'context',
     prettyPrint: isDebugMode
       ? {
           translateTime: 'SYS:HH:MM:ss',
