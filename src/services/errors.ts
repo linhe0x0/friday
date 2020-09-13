@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 interface RichErrorLike {
   name: string
   error?: Error
@@ -14,6 +16,10 @@ interface RichErrorOptions {
 
 class RichError extends Error {
   code?: number
+
+  status?: number
+
+  statusCode?: number
 
   error?: Error
 
@@ -52,6 +58,8 @@ class RichError extends Error {
 
   withCode(code: number): RichError {
     this.code = code
+    this.status = code
+    this.statusCode = code
 
     return this
   }
@@ -63,28 +71,31 @@ class RichError extends Error {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function throwError(message: string, context?: Record<string, any>): void
-function throwError(
+export function createError(
+  message: string,
+  context?: Record<string, any>
+): RichError
+export function createError(
   name: string,
   message: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
-): void
-function throwError(
+): RichError
+export function createError(
   code: number,
   message: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
-): void
-function throwError(options: RichErrorOptions): void
-function throwError(...args): void {
+): RichError
+export function createError(options: RichErrorOptions): RichError
+export function createError(...args): RichError {
   const defaultErrorName = 'unknown'
   const opts: RichErrorOptions = {
     message: '',
   }
 
   if (typeof args[0] === 'object') {
-    Object.assign(opts, args[0])
+    _.assign(opts, args[0])
   } else if (typeof args[0] === 'string') {
     if (args.length === 1) {
       ;[opts.message] = args
@@ -101,9 +112,46 @@ function throwError(...args): void {
     throw new Error('Message is missed.')
   }
 
-  const e = new RichError(opts.name || defaultErrorName, opts.message)
+  const err = new RichError(opts.name || defaultErrorName, opts.message)
 
-  e.throw()
+  if (opts.code) {
+    err.withCode(opts.code)
+  }
+
+  if (opts.context) {
+    err.with(opts.context)
+  }
+
+  if (opts.error) {
+    err.withError(opts.error)
+  }
+
+  return err
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function throwError(
+  message: string,
+  context?: Record<string, any>
+): never
+export function throwError(
+  name: string,
+  message: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context?: Record<string, any>
+): never
+export function throwError(
+  code: number,
+  message: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context?: Record<string, any>
+): never
+export function throwError(options: RichErrorOptions): never
+export function throwError(...args): never {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const err = createError(args[0], args[1], args[2])
+
+  throw err
 }
 
 export const newError = (name: string, message?: string): RichError => {
@@ -122,12 +170,4 @@ export const is = (err: RichErrorLike, name: string): boolean => {
   }
 
   return false
-}
-
-export default {
-  throwError,
-  newError,
-  new: newError,
-  throw: throwError,
-  is,
 }

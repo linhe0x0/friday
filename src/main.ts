@@ -1,3 +1,5 @@
+import * as errorHelpers from './services/errors'
+
 export { default as useLogger } from './utilities/logger'
 
 // App must be exported after useLogger due to side effect of router register.
@@ -24,4 +26,5 @@ export {
 /**
  * Errors
  */
-export { default as errors } from './services/errors'
+export const errors = errorHelpers
+export const { createError, throwError } = errorHelpers
