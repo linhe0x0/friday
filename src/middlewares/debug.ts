@@ -75,7 +75,10 @@ const logError = (err: KoaError): void => {
   }
 }
 
-export default async function(ctx: Koa.Context, next: Function): Promise<void> {
+export default async function debugMiddleware(
+  ctx: Koa.Context,
+  next: Koa.Next
+): Promise<void> {
   requestCount += 1
 
   newLine()

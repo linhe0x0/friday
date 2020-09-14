@@ -5,7 +5,15 @@ import pino from 'pino'
 
 import isDebug from './is-debug'
 
-export default function loggerGenerator(
+interface LoggingMethodOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  mergingObject: Record<string, any>
+  message: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  interpolationValues: any[]
+}
+
+export function loggerGenerator(
   name: string,
   level?: string,
   labels?: Record<string, string>,
@@ -56,4 +64,109 @@ export default function loggerGenerator(
   })
 
   return logger
+}
+
+class Logger {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  logger: any = null
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context?: Record<string, any> = undefined
+
+  err?: Error = undefined
+
+  constructor(
+    name: string,
+    level?: string,
+    labels?: Record<string, string>,
+    mixin?: () => Record<string, string>
+  ) {
+    this.logger = loggerGenerator(name, level, labels, mixin)
+  }
+
+  caller(
+    method: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    mergingObject?: Record<string, any>,
+    message?: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...interpolationValues: any[]
+  ) {
+    const options: LoggingMethodOptions = {
+      mergingObject: {},
+      message: '',
+      interpolationValues: [],
+    }
+
+    if (typeof mergingObject === 'string') {
+      options.message = mergingObject
+      options.interpolationValues = interpolationValues
+    } else {
+      options.mergingObject = mergingObject || {}
+      options.message = message || ''
+      options.interpolationValues = interpolationValues
+    }
+
+    if (this.context) {
+      _.assign(options.mergingObject, this.context)
+    }
+
+    if (this.err) {
+      _.assign(options.mergingObject, {
+        error: _.pick(this.err, ['name', 'message', 'stack']),
+      })
+    }
+
+    this.logger[method].call(
+      this.logger,
+      options.mergingObject,
+      options.message,
+      ...options.interpolationValues
+    )
+
+    this.context = undefined
+    this.err = undefined
+  }
+
+  trace(...args) {
+    this.caller('trace', ...args)
+  }
+
+  debug(...args) {
+    this.caller('debug', ...args)
+  }
+
+  info(...args) {
+    this.caller('info', ...args)
+  }
+
+  warn(...args) {
+    this.caller('warn', ...args)
+  }
+
+  error(...args) {
+    this.caller('error', ...args)
+  }
+
+  fatal(...args) {
+    this.caller('fatal', ...args)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  withContext(payload: Record<string, any>) {
+    this.context = payload
+  }
+
+  withError(err: Error) {
+    this.err = err
+  }
+}
+
+export default function useLogger(
+  name: string,
+  level?: string,
+  labels?: Record<string, string>,
+  mixin?: () => Record<string, string>
+): Logger {
+  return new Logger(name, level, labels, mixin)
 }

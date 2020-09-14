@@ -1,4 +1,5 @@
 export interface ValidateSchema {
   required?: string[]
-  properties: Record<string, object>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  properties: Record<string, any>
 }

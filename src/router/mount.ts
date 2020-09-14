@@ -3,13 +3,15 @@ import _ from 'lodash'
 import path from 'path'
 
 import loader from '../utilities/loader'
-import loggerGenerator from '../utilities/logger'
+import useLogger from '../utilities/logger'
 
-const logger = loggerGenerator('friday:router')
+const logger = useLogger('friday:router')
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = function noop(): void {}
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export default function mount(): Function {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   let userRouter: Function = noop
   const targetPathList = [
     path.resolve(process.cwd(), 'dist/router.js'),
@@ -17,7 +19,7 @@ export default function mount(): Function {
   ]
   let routerPath = ''
 
-  _.forEach(targetPathList, item => {
+  _.forEach(targetPathList, (item) => {
     try {
       fs.accessSync(item, fs.constants.F_OK)
 
@@ -39,7 +41,7 @@ export default function mount(): Function {
     userRouter = loader(routerPath)
   } catch (err) {
     logger.warn(
-      `Failed to load your routes from expect router file: [${targetPathList}]:`,
+      `Failed to load your routes from expect router file: [${targetPathList}]: %s`,
       err.message
     )
     logger.warn('Routes of your app is missed.')

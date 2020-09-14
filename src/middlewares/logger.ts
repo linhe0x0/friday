@@ -1,14 +1,16 @@
 import Koa from 'koa'
 import _ from 'lodash'
-import uuidv3 from 'uuid/v3'
-import uuidv4 from 'uuid/v4'
+import { v3 as uuidv3, v4 as uuidv4 } from 'uuid'
 
 import isDebug from '../utilities/is-debug'
-import loggerGenerator from '../utilities/logger'
+import useLogger from '../utilities/logger'
 
 const isDebugMode = isDebug()
 
-export default function(ctx: Koa.Context, next: Function): Promise<void> {
+export default function loggerMiddleware(
+  ctx: Koa.Context,
+  next: Koa.Next
+): Promise<void> {
   const requestID =
     ctx.header['x-request-id'] ||
     ctx.state.requestID ||
@@ -17,7 +19,7 @@ export default function(ctx: Koa.Context, next: Function): Promise<void> {
   if (isDebugMode) {
     const shortRequestID = _.first(_.split(requestID, '-'))
 
-    ctx.logger = loggerGenerator(`request[${shortRequestID}]`)
+    ctx.logger = useLogger(`request[${shortRequestID}]`)
   } else {
     const extraLabels = {
       'x-request-id': requestID,
@@ -46,7 +48,7 @@ export default function(ctx: Koa.Context, next: Function): Promise<void> {
       return extra
     }
 
-    ctx.logger = loggerGenerator(
+    ctx.logger = useLogger(
       `[${ctx.method}]${ctx.url}`,
       undefined,
       extraLabels,

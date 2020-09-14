@@ -73,6 +73,7 @@ class RichError extends Error {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createError(
   message: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): RichError
 export function createError(
@@ -88,7 +89,8 @@ export function createError(
   context?: Record<string, any>
 ): RichError
 export function createError(options: RichErrorOptions): RichError
-export function createError(...args): RichError {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createError(...args: any[]): RichError {
   const defaultErrorName = 'unknown'
   const opts: RichErrorOptions = {
     message: '',
@@ -132,6 +134,7 @@ export function createError(...args): RichError {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function throwError(
   message: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): never
 export function throwError(
@@ -147,7 +150,8 @@ export function throwError(
   context?: Record<string, any>
 ): never
 export function throwError(options: RichErrorOptions): never
-export function throwError(...args): never {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
+export function throwError(...args: any): never {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const err = createError(args[0], args[1], args[2])
 

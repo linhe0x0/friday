@@ -32,7 +32,7 @@ export function validate(
   err.status = 400
   err.statusCode = 400
 
-  err.errors = _.map(validator.errors, item => {
+  err.errors = _.map(validator.errors, (item) => {
     const dataPath = item.dataPath.replace(/\//g, '.')
 
     return _.assign({}, item, {

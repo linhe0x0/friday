@@ -59,7 +59,7 @@ export default async function serve(
       server.listen(port, host, listenCallback)
     }
 
-    server.on('error', err => {
+    server.on('error', (err) => {
       reject(err)
     })
   })

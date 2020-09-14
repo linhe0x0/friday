@@ -48,6 +48,7 @@ const args = yargs
     type: 'boolean',
   })
   .example(
+    '',
     `
   For TCP (traditional host/port) endpoint:
 
@@ -91,7 +92,7 @@ const endpoint: Endpoint = listen
   ? parseEndpoint(listen)
   : {
       protocol: EndpointProtocol.HTTP,
-      host,
+      host: host || defaultHost,
       port,
     }
 
@@ -129,24 +130,24 @@ const restartServer = (
   const watched = watcher.getWatched()
   const toDelete: string[] = []
 
-  _.forEach(_.keys(watched), mainPath => {
-    _.forEach(watched[mainPath], subPath => {
+  _.forEach(_.keys(watched), (mainPath) => {
+    _.forEach(watched[mainPath], (subPath) => {
       const fullPath = path.join(mainPath, subPath)
 
       toDelete.push(fullPath)
     })
   })
 
-  const haveToReloadFiles = _.map(['app.js', 'router/router.js'], item =>
+  const haveToReloadFiles = _.map(['app.js', 'router/router.js'], (item) =>
     path.resolve(__dirname, '..', item)
   )
 
-  const toReload = _.filter(_.keys(require.cache), item =>
+  const toReload = _.filter(_.keys(require.cache), (item) =>
     _.includes(haveToReloadFiles, item)
   )
 
   // Clean cache
-  _.forEach(_.concat(toDelete, toReload), item => {
+  _.forEach(_.concat(toDelete, toReload), (item) => {
     let location: string
 
     try {
@@ -169,7 +170,7 @@ const restartServer = (
       hooks.beforeRestart()
 
       serve(endpoint, entryFile)
-        .then(newServer => {
+        .then((newServer) => {
           hooks.afterRestart()
 
           consola.info(chalk.blue('Server is ready.'))
@@ -184,12 +185,12 @@ const restartServer = (
 getPort({
   port: endpoint.port,
 })
-  .then(result => {
+  .then((result) => {
     endpoint.port = result
 
     return serve(endpoint, entryFile)
   })
-  .then(curretServer => {
+  .then((curretServer) => {
     const { isTTY } = process.stdout
     const usedPort = endpoint.port
     const isUnixProtocol = endpoint.protocol === EndpointProtocol.UNIX
@@ -250,7 +251,7 @@ getPort({
 
     process.stdout.write(box)
   })
-  .catch(err => {
+  .catch((err) => {
     consola.error(err)
     process.exit(1)
   })

@@ -4,9 +4,9 @@ import path from 'path'
 
 import { validate } from '../services/validator'
 import loader from './loader'
-import loggerGenerator from './logger'
+import useLogger from './logger'
 
-const logger = loggerGenerator('validate-config')
+const logger = useLogger('validate-config')
 
 export default function validateConfig(): void {
   const configDir = config.util.getEnv('NODE_CONFIG_DIR')
@@ -29,7 +29,7 @@ export default function validateConfig(): void {
   } catch (err) {
     logger.error(`Invalid configurations from ${configDir}:`)
 
-    _.forEach(err.errors, item => {
+    _.forEach(err.errors, (item) => {
       logger.error(`  ${item.dataPath} ${item.message}`)
     })
 

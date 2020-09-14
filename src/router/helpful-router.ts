@@ -5,9 +5,9 @@ import prettyMilliseconds from 'pretty-ms'
 import { getConfigWithDefault } from '../services/config'
 import { PkgInfo } from '../types/pkg'
 import loader from '../utilities/loader'
-import loggerGenerator from '../utilities/logger'
+import useLogger from '../utilities/logger'
 
-const logger = loggerGenerator('friday:router')
+const logger = useLogger('friday:router')
 
 const pkgPath = path.resolve(process.cwd(), 'package.json')
 
@@ -41,7 +41,8 @@ const pong = function pong(ctx: Koa.Context): void {
   ctx.body = 'pong'
 }
 
-export default function helpfulRouter(router): void {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
+export default function helpfulRouter(router: any): void {
   router.get('/_info', info)
   router.get('/_ping', pong)
   router.get('/ping', pong)

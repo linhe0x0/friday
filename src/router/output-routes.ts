@@ -1,13 +1,14 @@
 import _ from 'lodash'
 
-import loggerGenerator from '../utilities/logger'
+import useLogger from '../utilities/logger'
 
-const logger = loggerGenerator('friday:router')
+const logger = useLogger('friday:router')
 
-export default function outputRoutes(router): void {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
+export default function outputRoutes(router: any): void {
   logger.debug('Served routes:')
 
-  router.stack.forEach(item => {
+  router.stack.forEach((item) => {
     const { methods, path } = item
     let methodTexts = methods.join(', ')
 
@@ -19,7 +20,7 @@ export default function outputRoutes(router): void {
         methodTexts = 'ALL'
       }
 
-      logger.debug('  ', _.padEnd(methodTexts, 10), path)
+      logger.debug('  %s %s', _.padEnd(methodTexts, 10), path)
     }
   })
 

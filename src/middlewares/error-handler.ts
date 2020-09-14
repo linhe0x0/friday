@@ -4,7 +4,10 @@ import _ from 'lodash'
 
 import { ErrorResponse } from '../types/errors'
 
-export default async function(ctx: Koa.Context, next: Function): Promise<void> {
+export default async function errorHandlerMiddleware(
+  ctx: Koa.Context,
+  next: Koa.Next
+): Promise<void> {
   try {
     await next()
   } catch (err) {

@@ -16,17 +16,18 @@ import router from './router/router'
 import { getOptionalConfig } from './services/config'
 import { validate } from './services/validator'
 import isDebug from './utilities/is-debug'
-import loggerGenerator from './utilities/logger'
+import useLogger from './utilities/logger'
 import validateConfig from './utilities/validate-config'
 
-const logger = loggerGenerator('friday')
+const logger = useLogger('friday')
 
 const app = new Koa()
 
 if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
   logger.warn(
-    `Running in "${process.env.NODE_ENV ||
-      'development'}" env. you can remove this warning by export NODE_ENV=production`
+    `Running in "${
+      process.env.NODE_ENV || 'development'
+    }" env. you can remove this warning by export NODE_ENV=production`
   )
 }
 
@@ -117,7 +118,7 @@ app.use(router.allowedMethods())
  */
 app.on('error', (err, ctx) => {
   logger.error(
-    'server error:',
+    'server error: %s, context: $o',
     err.message,
     _.pick(ctx, ['request', 'response'])
   )

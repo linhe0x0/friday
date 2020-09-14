@@ -37,6 +37,7 @@ const args = yargs
     type: 'boolean',
   })
   .example(
+    '',
     `
   For TCP (traditional host/port) endpoint:
 
@@ -80,7 +81,7 @@ const endpoint: Endpoint = listen
   ? parseEndpoint(listen)
   : {
       protocol: EndpointProtocol.HTTP,
-      host,
+      host: host || defaultHost,
       port,
     }
 
@@ -105,7 +106,7 @@ serve(endpoint, entryFile)
 
     process.stdout.write(message)
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err)
     process.exit(1)
   })

@@ -7,7 +7,10 @@ const noop = function noop(): void {}
 
 const hooksCache = {}
 
-export default function useHooks(file: string): Record<string, Function> {
+export default function useHooks(
+  file: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Record<string, () => Promise<any> | void> {
   let hooks = hooksCache[file]
 
   if (!hooks) {

@@ -1,8 +1,10 @@
 import Koa from 'koa'
-import uuidv3 from 'uuid/v3'
-import uuidv4 from 'uuid/v4'
+import { v3 as uuidv3, v4 as uuidv4 } from 'uuid'
 
-export default function(ctx: Koa.Context, next: Function): Promise<void> {
+export default function requestIDMiddleware(
+  ctx: Koa.Context,
+  next: Koa.Next
+): Promise<void> {
   const requestID =
     ctx.header['x-request-id'] || uuidv3(Date.now().toString(), uuidv4())
 
