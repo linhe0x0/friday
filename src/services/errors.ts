@@ -29,6 +29,10 @@ class RichError extends Error {
   constructor(name: string, message: string) {
     super(message)
 
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, RichError)
+    }
+
     if (name) {
       this.name = name
     }
