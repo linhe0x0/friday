@@ -100,7 +100,7 @@ class Logger {
 
     if (typeof mergingObject === 'string') {
       options.message = mergingObject
-      options.interpolationValues = interpolationValues
+      options.interpolationValues = _.concat([message], interpolationValues)
     } else {
       options.mergingObject = mergingObject || {}
       options.message = message || ''
@@ -117,12 +117,20 @@ class Logger {
       })
     }
 
-    this.logger[method].call(
-      this.logger,
-      options.mergingObject,
-      options.message,
-      ...options.interpolationValues
-    )
+    if (_.isEmpty(options.mergingObject)) {
+      this.logger[method].call(
+        this.logger,
+        options.message,
+        ...options.interpolationValues
+      )
+    } else {
+      this.logger[method].call(
+        this.logger,
+        options.mergingObject,
+        options.message,
+        ...options.interpolationValues
+      )
+    }
 
     this.context = undefined
     this.err = undefined
