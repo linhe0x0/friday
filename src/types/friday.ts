@@ -4,7 +4,7 @@ export enum EndpointProtocol {
   UNIX = 'unix:',
 }
 
-export type Endpoint = {
+export interface Endpoint {
   protocol: EndpointProtocol
   host: string
   port?: number

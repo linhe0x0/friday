@@ -8,15 +8,13 @@ interface RichErrorLike {
 interface RichErrorOptions {
   name?: string
   message: string
-  code?: number
+  statusCode?: number
   error?: Error
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 }
 
 class RichError extends Error {
-  code?: number
-
   status?: number
 
   statusCode?: number
@@ -45,6 +43,16 @@ class RichError extends Error {
     return this
   }
 
+  /**
+   * Alias for with.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  withContext(context: Record<string, any>): RichError {
+    this.context = context
+
+    return this
+  }
+
   withName(name: string): RichError {
     this.name = name
 
@@ -60,10 +68,9 @@ class RichError extends Error {
     return this
   }
 
-  withCode(code: number): RichError {
-    this.code = code
-    this.status = code
-    this.statusCode = code
+  withStatus(statusCode: number): RichError {
+    this.status = statusCode
+    this.statusCode = statusCode
 
     return this
   }
@@ -87,7 +94,7 @@ export function createError(
   context?: Record<string, any>
 ): RichError
 export function createError(
-  code: number,
+  statusCode: number,
   message: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
@@ -111,7 +118,7 @@ export function createError(...args: any[]): RichError {
       ;[opts.name, opts.message, opts.context] = args
     }
   } else if (typeof args[0] === 'number') {
-    ;[opts.code, opts.message, opts.context] = args
+    ;[opts.statusCode, opts.message, opts.context] = args
   }
 
   if (!opts.message) {
@@ -120,8 +127,8 @@ export function createError(...args: any[]): RichError {
 
   const err = new RichError(opts.name || defaultErrorName, opts.message)
 
-  if (opts.code) {
-    err.withCode(opts.code)
+  if (opts.statusCode) {
+    err.withStatus(opts.statusCode)
   }
 
   if (opts.context) {
@@ -148,7 +155,7 @@ export function throwError(
   context?: Record<string, any>
 ): never
 export function throwError(
-  code: number,
+  statusCode: number,
   message: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>

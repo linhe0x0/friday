@@ -35,6 +35,10 @@ export default async function errorHandlerMiddleware(
       response.errors = err.errors
     }
 
+    if (err.context) {
+      _.assign(response, err.context)
+    }
+
     _.assign(response, err.payload, err.extra)
 
     switch (ctx.accepts(['json', 'html', 'text'])) {

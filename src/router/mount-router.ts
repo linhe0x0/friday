@@ -10,7 +10,7 @@ const logger = useLogger('friday:router')
 const noop = function noop(): void {}
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export default function mount(): Function {
+export default function mount(registeredRouteLength = 0): Function {
   // eslint-disable-next-line @typescript-eslint/ban-types
   let userRouter: Function = noop
   const targetPathList = [
@@ -40,11 +40,13 @@ export default function mount(): Function {
 
     userRouter = loader(routerPath)
   } catch (err) {
-    logger.warn(
-      `Failed to load your routes from expect router file: [${targetPathList}]: %s`,
-      err.message
-    )
-    logger.warn('Routes of your app is missed.')
+    if (registeredRouteLength === 0) {
+      logger.warn(
+        `Failed to load your routes from expect router file: [${targetPathList}]: %s`,
+        err.message
+      )
+      logger.warn('Routes of your app is missed.')
+    }
   }
 
   if (typeof userRouter !== 'function') {
