@@ -17,14 +17,12 @@ interface fileRouteMetadata {
 
 const apiPrefix = '/api'
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export default function mountApi(): Function {
-  const apiDir = path.resolve(process.cwd(), 'dist/app')
+export function fileRoutes(dir: string): fileRouteMetadata[] {
+  const files = glob.sync(`${dir}/*/api/**/*.js`)
 
-  const files = glob.sync(`${apiDir}/*/api/**/*.js`)
-  const routeUrlList: fileRouteMetadata[] = _.filter(
+  return _.filter(
     _.map(files, (item): fileRouteMetadata | undefined => {
-      const filePath = item.substring(apiDir.length + 1)
+      const filePath = item.substring(dir.length + 1)
       const [scope, ...paths] = filePath.split('/')
       const routesInFilePath: string[] = _.tail(paths)
       const values = _.split(_.last(routesInFilePath), '.')
@@ -59,6 +57,13 @@ export default function mountApi(): Function {
     }),
     (item) => !!item
   ) as fileRouteMetadata[]
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export default function mountApi(): Function {
+  const apiDir = path.resolve(process.cwd(), 'dist/app')
+
+  const routeUrlList = fileRoutes(apiDir)
 
   const conflicts = _.filter(
     _.map(routeUrlList, (item, index) => {
