@@ -4,9 +4,6 @@
   "description": "Let every day be like Friday.",
   "main": "./dist/main.js",
   "types": "./index.d.ts",
-  "files": [
-    "./dist"
-  ],
   "bin": {
     "friday": "./dist/bin/friday.js",
     "friday-dev": "./dist/bin/friday-dev.js"
