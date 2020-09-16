@@ -1,3 +1,4 @@
+// XXX: Confusing lint warning.
 // eslint-disable-next-line no-shadow
 export enum EndpointProtocol {
   TCP = 'tcp:',
