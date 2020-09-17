@@ -117,6 +117,10 @@ app.use(router.allowedMethods())
  * Catch errors.
  */
 app.on('error', (err, ctx) => {
+  if (process.env.FRIDAY_ENV === 'development') {
+    return
+  }
+
   const payload = {
     request: _.defaults(_.pick(ctx.request, ['method', 'url', 'header']), {
       body: ctx.request.body,
