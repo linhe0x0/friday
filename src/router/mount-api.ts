@@ -141,7 +141,10 @@ ${conflictMessage}
         async (ctx: Koa.Context): Promise<void> => {
           if (!_.isEmpty(schema)) {
             try {
-              validate(schema, _.assign({}, ctx.params, ctx.query, ctx.body))
+              validate(
+                schema,
+                _.assign({}, ctx.params, ctx.query, ctx.request.body)
+              )
             } catch (err) {
               ctx.throw(400, err)
               return
