@@ -116,20 +116,20 @@ ${conflictMessage}
       )
     }
 
-    const { schema, middlewares } = handler || {}
+    const { schema, middleware } = handler || {}
 
     return {
       method: item.method,
       url: item.url,
       schema: schema || {},
-      middlewares: middlewares || [],
+      middleware: middleware || [],
       handler,
     }
   })
 
   return function mount(router) {
     _.forEach(routes, (item) => {
-      const { method, url, schema, middlewares, handler } = item
+      const { method, url, schema, middleware, handler } = item
 
       if (!router[method]) {
         throw new Error(`Unsupported route method: ${method} (${url})`)
@@ -137,7 +137,7 @@ ${conflictMessage}
 
       router[method](
         url,
-        ...middlewares,
+        ...middleware,
         async (ctx: Koa.Context): Promise<void> => {
           if (!_.isEmpty(schema)) {
             try {
