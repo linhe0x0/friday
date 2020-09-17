@@ -117,11 +117,14 @@ app.use(router.allowedMethods())
  * Catch errors.
  */
 app.on('error', (err, ctx) => {
-  logger.error(
-    'server error: %s, context: $o',
-    err.message,
-    _.pick(ctx, ['request', 'response'])
-  )
+  const payload = {
+    request: _.defaults(_.pick(ctx.request, ['method', 'url', 'header']), {
+      body: ctx.request.body,
+    }),
+    response: _.pick(ctx.response, ['status', 'message', 'header']),
+  }
+
+  logger.withError(err).error(payload, 'server error: %s', err.message)
 })
 
 export default app

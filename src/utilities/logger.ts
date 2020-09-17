@@ -163,10 +163,14 @@ class Logger {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withContext(payload: Record<string, any>) {
     this.context = payload
+
+    return this
   }
 
   withError(err: Error) {
     this.err = err
+
+    return this
   }
 }
 
