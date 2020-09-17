@@ -15,6 +15,7 @@
   ],
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-shadow": "warn",
     "import/no-extraneous-dependencies": [
       "warn",
       {
