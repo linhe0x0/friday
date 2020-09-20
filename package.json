@@ -33,6 +33,9 @@
   "engines": {
     "node": ">=10"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
