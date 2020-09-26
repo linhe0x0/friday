@@ -47,7 +47,7 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
         url += `/${filename}`
       }
 
-      url = url.replace(/\[(.*)\]/, (_s, name) => `:${name}`)
+      url = url.replace(/\[([^\[\]]+)\]/g, (_s, name) => `:${name}`)
 
       return {
         file: filePath,
