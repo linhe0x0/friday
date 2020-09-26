@@ -1,6 +1,6 @@
 {
   "name": "@sqrtthree/friday",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Let every day be like Friday.",
   "main": "./dist/main.js",
   "types": "./index.d.ts",
