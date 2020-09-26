@@ -47,6 +47,7 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
         url += `/${filename}`
       }
 
+      // eslint-disable-next-line
       url = url.replace(/\[([^\[\]]+)\]/g, (_s, name) => `:${name}`)
 
       return {
