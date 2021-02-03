@@ -33,12 +33,16 @@ export function mount(app: Koa, options?: Partial<MountOptions>) {
       useApiRouter(router)
 
       // Mount user routes from [USER_APP_ROOT_DIR]/dist/router.js.
-      const useUserRouter = mountRouter(router.stack.length)
+      const useUserRouter = mountRouter()
 
       useUserRouter(router)
     } catch (err) {
       logger.error(err.message)
       process.exit(1)
+    }
+
+    if (router.stack.length === 0) {
+      logger.warn('Routes are missed.')
     }
 
     app.use(router.routes())
