@@ -9,7 +9,7 @@ import resolveEntry from './resolve-entry'
 const args = yargs.argv
 
 export default async function getServer(): Promise<Koa> {
-  const entryFile = resolveEntry(args._[0])
+  const entryFile = resolveEntry(args._[0] as string)
 
   let entry
 

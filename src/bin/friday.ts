@@ -92,7 +92,7 @@ if (endpoint.protocol !== EndpointProtocol.UNIX) {
   })
 }
 
-const entryFile = resolveEntry(args._[0])
+const entryFile = resolveEntry(args._[0] as string)
 
 serve(endpoint, entryFile)
   .then(() => {

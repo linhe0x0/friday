@@ -1,4 +1,4 @@
-import Ajv from 'ajv'
+import Ajv, { DefinedError } from 'ajv'
 import ajvErrors from 'ajv-errors'
 import _ from 'lodash'
 
@@ -14,7 +14,6 @@ export function validate(
 ): void {
   const ajv = new Ajv({
     allErrors: true,
-    jsonPointers: true,
   })
 
   ajvErrors(ajv)
@@ -32,7 +31,7 @@ export function validate(
   err.status = 400
   err.statusCode = 400
 
-  err.errors = _.map(validator.errors, (item) => {
+  err.errors = _.map(validator.errors as DefinedError[], (item) => {
     const dataPath = item.dataPath.replace(/\//g, '.')
 
     return _.assign({}, item, {

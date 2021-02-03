@@ -103,7 +103,7 @@ if (endpoint.protocol !== EndpointProtocol.UNIX) {
   })
 }
 
-const entryFile = resolveEntry(args._[0])
+const entryFile = resolveEntry(args._[0] as string)
 const originalPort = endpoint.port
 
 const hooks = useHooks(entryFile)
