@@ -2,6 +2,7 @@ import glob from 'glob'
 import Koa from 'koa'
 import _ from 'lodash'
 import path from 'path'
+import { isURL } from 'validator'
 
 import { validate } from '../services/validator'
 import loader from '../utilities/loader'
@@ -178,7 +179,17 @@ ${conflictMessage}
             throw Error(`Unexpected response body value: ${body}.`)
           }
 
-          ctx.body = body
+          const redirect =
+            _.isString(body) &&
+            isURL(body, {
+              require_host: false,
+            })
+
+          if (redirect) {
+            ctx.redirect(body)
+          } else {
+            ctx.body = body
+          }
         }
       )
     })
