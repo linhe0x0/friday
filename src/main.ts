@@ -1,12 +1,11 @@
-import * as errorHelpers from './services/errors'
+/**
+ * Errors
+ */
+export { createError, throwError } from './services/errors'
+export * as errors from './services/errors'
 
+// Logger
 export { default as useLogger } from './utilities/logger'
-
-// App must be exported after useLogger due to side effect of router register.
-export { default as app } from './app'
-
-// Server
-export { default as getServer } from './utilities/get-server'
 
 /**
  * Validator
@@ -23,8 +22,8 @@ export {
   getConfigWithDefault,
 } from './services/config'
 
-/**
- * Errors
- */
-export const errors = errorHelpers
-export const { createError, throwError } = errorHelpers
+// App must be exported after useLogger due to side effect of router register.
+export { default as app } from './app'
+
+// Server
+export { default as getServer } from './utilities/get-server'
