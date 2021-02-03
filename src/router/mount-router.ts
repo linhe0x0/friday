@@ -4,6 +4,7 @@ import path from 'path'
 
 import loader from '../utilities/loader'
 import useLogger from '../utilities/logger'
+import { getRootDir } from '../utilities/root-dir'
 
 interface RouteFn {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,9 +14,10 @@ interface RouteFn {
 const logger = useLogger('friday:router')
 
 export default function mount(): RouteFn {
+  const rootDir = getRootDir()
   const targetPathList = [
-    path.resolve(process.cwd(), 'dist/router.js'),
-    path.resolve(process.cwd(), 'dist/router/index.js'),
+    path.resolve(rootDir, 'router.js'),
+    path.resolve(rootDir, 'router/index.js'),
   ]
 
   let routerPath = ''

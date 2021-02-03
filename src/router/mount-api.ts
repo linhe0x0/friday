@@ -7,6 +7,7 @@ import { isURL } from 'validator'
 import { validate } from '../services/validator'
 import loader from '../utilities/loader'
 import useLogger from '../utilities/logger'
+import { getRootDir } from '../utilities/root-dir'
 
 const logger = useLogger('friday:router')
 
@@ -83,7 +84,9 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export default function mountApi(): Function {
-  const apiDir = path.resolve(process.cwd(), 'dist/app')
+  const rootDir = getRootDir()
+
+  const apiDir = path.resolve(rootDir, 'app')
 
   const routeUrlList = fileRoutes(apiDir)
 

@@ -24,12 +24,12 @@ export function mount(app: Koa, options?: Partial<MountOptions>) {
   const router = new Router()
 
   try {
-    // Mount user routes from [USER_APP_ROOT_DIR]/dist/app/*/api/**.js.
+    // Mount user routes from [USER_APP_ROOT_DIR]/app/*/api/**.js.
     const useApiRouter = mountApi()
 
     useApiRouter(router)
 
-    // Mount user routes from [USER_APP_ROOT_DIR]/dist/router.js.
+    // Mount user routes from [USER_APP_ROOT_DIR]/router.js.
     const useUserRouter = mountRouter()
 
     useUserRouter(router)

@@ -17,6 +17,7 @@ import useHooks from '../utilities/hooks'
 import isValidPort from '../utilities/is-valid-port'
 import parseEndpoint from '../utilities/parse-endpoint'
 import resolveEntry from '../utilities/resolve-entry'
+import { setRootDir } from '../utilities/root-dir'
 import serve from '../utilities/serve'
 import watch from '../utilities/watcher'
 
@@ -105,6 +106,8 @@ if (endpoint.protocol !== EndpointProtocol.UNIX) {
 
 const entryFile = resolveEntry(args._[0] as string)
 const originalPort = endpoint.port
+
+setRootDir(path.parse(entryFile).dir)
 
 const hooks = useHooks(entryFile)
 

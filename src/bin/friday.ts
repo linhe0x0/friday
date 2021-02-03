@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
 import _ from 'lodash'
+import path from 'path'
 import yargs from 'yargs'
 
 import { Endpoint, EndpointProtocol } from '../types/friday'
 import isValidPort from '../utilities/is-valid-port'
 import parseEndpoint from '../utilities/parse-endpoint'
 import resolveEntry from '../utilities/resolve-entry'
+import { setRootDir } from '../utilities/root-dir'
 import serve from '../utilities/serve'
 
 const args = yargs
@@ -93,6 +95,8 @@ if (endpoint.protocol !== EndpointProtocol.UNIX) {
 }
 
 const entryFile = resolveEntry(args._[0] as string)
+
+setRootDir(path.parse(entryFile).dir)
 
 serve(endpoint, entryFile)
   .then(() => {
