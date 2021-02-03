@@ -23,35 +23,33 @@ export function mount(app: Koa, options?: Partial<MountOptions>) {
 
   const router = new Router()
 
-  helpfulRouter(router)
+  try {
+    // Mount user routes from [USER_APP_ROOT_DIR]/dist/app/*/api/**.js.
+    const useApiRouter = mountApi()
 
-  setTimeout(() => {
-    try {
-      // Mount user routes from [USER_APP_ROOT_DIR]/dist/app/*/api/**.js.
-      const useApiRouter = mountApi()
+    useApiRouter(router)
 
-      useApiRouter(router)
+    // Mount user routes from [USER_APP_ROOT_DIR]/dist/router.js.
+    const useUserRouter = mountRouter()
 
-      // Mount user routes from [USER_APP_ROOT_DIR]/dist/router.js.
-      const useUserRouter = mountRouter()
-
-      useUserRouter(router)
-    } catch (err) {
-      logger.error(err.message)
-      process.exit(1)
-    }
+    useUserRouter(router)
 
     if (router.stack.length === 0) {
-      logger.warn('Routes are missed.')
+      throw new Error('Routes are missing.')
     }
+  } catch (err) {
+    logger.error(err.message)
+    process.exit(1)
+  }
 
-    app.use(router.routes())
-    app.use(router.allowedMethods())
+  helpfulRouter(router)
 
-    if (opts.debug) {
-      outputRoutes(router)
-    }
-  }, 0)
+  app.use(router.routes())
+  app.use(router.allowedMethods())
+
+  if (opts.debug) {
+    outputRoutes(router)
+  }
 
   return router
 }
