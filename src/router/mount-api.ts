@@ -17,6 +17,22 @@ interface fileRouteMetadata {
 
 const apiPrefix = '/api'
 
+const ignoredFile = (filename: string): boolean => {
+  if (_.startsWith(filename, '.')) {
+    return true
+  }
+
+  if (_.startsWith(filename, '_')) {
+    return true
+  }
+
+  if (_.endsWith(filename, '.test.js')) {
+    return true
+  }
+
+  return false
+}
+
 export function fileRoutes(dir: string): fileRouteMetadata[] {
   const files = glob.sync(`${dir}/*/api/**/*.js`)
 
@@ -29,7 +45,11 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
       const filename = _.first(values)
       const method = values.length === 2 ? 'all' : values[1]
 
-      const ignore = _.startsWith(filename, '_')
+      if (!filename) {
+        return undefined
+      }
+
+      const ignore = ignoredFile(filename)
 
       if (ignore) {
         return undefined
