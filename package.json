@@ -54,7 +54,7 @@
     "chokidar": "~3.5.1",
     "clipboardy": "~2.3.0",
     "config": "~3.3.3",
-    "consola": "~2.15.1",
+    "consola": "~2.15.2",
     "get-port": "^5.1.1",
     "glob": "~7.1.6",
     "ip": "^1.1.5",
