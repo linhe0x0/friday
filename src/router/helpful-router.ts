@@ -3,13 +3,17 @@ import path from 'path'
 import prettyMilliseconds from 'pretty-ms'
 
 import { getConfigWithDefault } from '../services/config'
-import { PkgInfo } from '../types/pkg'
 import loader from '../utilities/loader'
 import useLogger from '../utilities/logger'
 
 const logger = useLogger('friday:router')
 
 const pkgPath = path.resolve(process.cwd(), 'package.json')
+
+interface PkgInfo {
+  name: string
+  version: string
+}
 
 let pkg: PkgInfo = {
   name: '',

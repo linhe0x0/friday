@@ -85,7 +85,6 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
 // eslint-disable-next-line @typescript-eslint/ban-types
 export default function mountApi(): Function {
   const rootDir = getRootDir()
-
   const apiDir = path.resolve(rootDir, 'app')
 
   const routeUrlList = fileRoutes(apiDir)

@@ -3,7 +3,12 @@ import ajvErrors from 'ajv-errors'
 import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
-import { ValidateSchema } from '../types/validator'
+
+interface ValidateSchema {
+  required?: string[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  properties: Record<string, any>
+}
 
 export function validate(
   schema: ValidateSchema,

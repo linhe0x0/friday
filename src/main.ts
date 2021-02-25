@@ -24,6 +24,3 @@ export {
 
 // App must be exported after useLogger due to side effect of router register.
 export { default as app } from './app'
-
-// Server
-export { default as getServer } from './utilities/get-server'

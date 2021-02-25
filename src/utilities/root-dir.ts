@@ -1,9 +1,13 @@
-let dir = ''
+import path from 'path'
 
 export function getRootDir(): string {
-  return process.env.USER_APP_ROOT_DIR || dir
-}
+  if (process.env.USER_APP_ROOT_DIR) {
+    return process.env.USER_APP_ROOT_DIR
+  }
 
-export function setRootDir(value: string): void {
-  dir = value
+  // Value of USER_APP_ENTRY_FILE will be set automatically in friday-cli.
+  const entry = process.env.USER_APP_ENTRY_FILE || process.argv[1]
+  const { dir } = path.parse(entry)
+
+  return dir
 }
