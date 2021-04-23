@@ -55,6 +55,7 @@ export function loggerGenerator(
     base: baseLabels,
     mixin: mixinFn,
     nestedKey: 'context',
+    timestamp: pino.stdTimeFunctions.isoTime,
     prettyPrint: isDebugMode
       ? {
           translateTime: 'SYS:HH:MM:ss',
