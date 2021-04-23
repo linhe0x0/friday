@@ -15,12 +15,12 @@ const newLine = (): void => {
 }
 
 const logRequest = (ctx: Koa.Context): void => {
+  const contentLength = parseInt(ctx.headers['content-length'] || '0', 10)
+  const contentType = ctx.headers['content-type'] || ''
+
   consola.log(chalk.grey(`> #${requestCount} ${ctx.method} ${ctx.url}`))
 
-  if (
-    ctx.headers['content-length'] > 0 &&
-    ctx.headers['content-type'].indexOf('application/json') === 0
-  ) {
+  if (contentLength > 0 && contentType.indexOf('application/json') === 0) {
     try {
       consola.log(ctx.request.body)
     } catch (err) {

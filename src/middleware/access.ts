@@ -4,12 +4,11 @@ export default function access(
   ctx: Koa.Context,
   next: Koa.Next
 ): Promise<void> {
+  const contentLength = parseInt(ctx.headers['content-length'] || '0', 10)
+  const contentType = ctx.headers['content-type'] || ''
   let bodyString = ''
 
-  if (
-    ctx.headers['content-length'] > 0 &&
-    ctx.headers['content-type'].indexOf('application/json') === 0
-  ) {
+  if (contentLength > 0 && contentType.indexOf('application/json') === 0) {
     try {
       const { body } = ctx.request
 
