@@ -39,17 +39,18 @@ export default function loggerMiddleware(
 
     const mixin = (): Record<string, string> => {
       const extra: Record<string, string> = {}
-      const { userID } = ctx.state
+      const { userID, uid } = ctx.state
+      const traceUserID = userID || uid
 
-      if (userID) {
-        extra.traceUserID = userID
+      if (traceUserID) {
+        extra.traceUserID = traceUserID
       }
 
       return extra
     }
 
     ctx.logger = useLogger(
-      `[${ctx.method}]${ctx.url}`,
+      `[${ctx.method}] ${ctx.url}`,
       undefined,
       extraLabels,
       mixin
