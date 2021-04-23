@@ -1,5 +1,4 @@
 import Koa from 'koa'
-import _ from 'lodash'
 
 export default function access(
   ctx: Koa.Context,

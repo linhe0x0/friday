@@ -10,7 +10,8 @@ export default function loader(filepath: string) {
 
     const originalMod = mod
 
-    if (mod && typeof mod === 'object' && mod.default) {
+    // eslint-disable-next-line no-underscore-dangle
+    if (mod && mod.__esModule && typeof mod === 'object' && mod.default) {
       mod = mod.default // Await to support es6 module's default export
     }
 
