@@ -7,6 +7,7 @@ import path from 'path'
 
 import cors from '@koa/cors'
 
+import accessMiddleware from './middleware/access'
 import debugMiddleware from './middleware/debug'
 import errorHandlerMiddleware from './middleware/error-handler'
 import loggerMiddleware from './middleware/logger'
@@ -68,6 +69,10 @@ app.use(bodyParser(_.assign({}, bodyParserOptions)))
 
 app.use(requestIDMiddleware)
 app.use(loggerMiddleware)
+
+if (!isDebugMode) {
+  app.use(accessMiddleware)
+}
 
 /**
  * Use static middleware.
