@@ -55,7 +55,8 @@ app.use(errorHandlerMiddleware)
 /**
  * Help secure the app with various HTTP headers by helmet.
  */
-const helmetOptions = getOptionalConfig('helmet')
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const helmetOptions = getOptionalConfig<any>('helmet')
 
 app.use(helmet(helmetOptions))
 
