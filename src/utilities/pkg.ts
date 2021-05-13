@@ -2,16 +2,18 @@ import path from 'path'
 
 import loader from './loader'
 
-const pkgPath = path.resolve(process.cwd(), 'package.json')
+export const pkgPath = path.resolve(process.cwd(), 'package.json')
 
 interface PkgInfo {
   name: string
   version: string
+  main: string
 }
 
 let pkg: PkgInfo = {
   name: '',
   version: '',
+  main: '',
 }
 
 try {
