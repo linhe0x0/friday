@@ -15,7 +15,6 @@ interface LoggingMethodOptions {
 
 export function loggerGenerator(
   name: string,
-  level?: string,
   labels?: Record<string, string>,
   mixin?: () => Record<string, string>
 ): pino.Logger {
@@ -31,35 +30,27 @@ export function loggerGenerator(
     logLevel = process.env.LOGGER_LEVEL
   }
 
-  if (level) {
-    logLevel = level
-  }
-
   if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'testing') {
     logLevel = 'silent'
   }
 
-  const baseLabels = _.assign(
-    {
-      hostname: os.hostname(),
-      pid: process.pid,
-    },
-    labels
-  )
-
-  const mixinFn = mixin || ((): Record<string, string> => ({}))
+  const defaultBaseLabels = {
+    hostname: os.hostname(),
+    pid: process.pid,
+  }
+  const baseLabels = _.assign(defaultBaseLabels, labels)
 
   const logger = pino({
     name,
     level: logLevel,
     base: baseLabels,
-    mixin: mixinFn,
+    mixin,
     nestedKey: 'context',
     timestamp: pino.stdTimeFunctions.isoTime,
     prettyPrint: isDebugMode
       ? {
           translateTime: 'SYS:HH:MM:ss',
-          ignore: _.join(_.keys(baseLabels), ','),
+          ignore: _.join(_.keys(defaultBaseLabels), ','),
         }
       : false,
   })
@@ -78,11 +69,10 @@ class Logger {
 
   constructor(
     name: string,
-    level?: string,
     labels?: Record<string, string>,
     mixin?: () => Record<string, string>
   ) {
-    this.logger = loggerGenerator(name, level, labels, mixin)
+    this.logger = loggerGenerator(name, labels, mixin)
   }
 
   caller(
@@ -177,9 +167,8 @@ class Logger {
 
 export default function useLogger(
   name: string,
-  level?: string,
   labels?: Record<string, string>,
   mixin?: () => Record<string, string>
 ): Logger {
-  return new Logger(name, level, labels, mixin)
+  return new Logger(name, labels, mixin)
 }

@@ -49,12 +49,7 @@ export default function loggerMiddleware(
       return extra
     }
 
-    ctx.logger = useLogger(
-      `[${ctx.method}] ${ctx.url}`,
-      undefined,
-      extraLabels,
-      mixin
-    )
+    ctx.logger = useLogger(`[${ctx.method}] ${ctx.url}`, extraLabels, mixin)
   }
 
   return next()
