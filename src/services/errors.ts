@@ -63,7 +63,12 @@ class RichError extends Error {
     const endsWithColon = this.message.trimRight().endsWith(':')
 
     this.error = err
-    this.message = `${this.message}${endsWithColon ? '' : ': '}${err.message}`
+
+    if (this.message) {
+      this.message = `${this.message}${endsWithColon ? '' : ': '}${err.message}`
+    } else {
+      this.message = err.message
+    }
 
     return this
   }
