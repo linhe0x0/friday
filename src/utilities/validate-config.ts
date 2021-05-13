@@ -6,20 +6,20 @@ import { validate } from '../services/validator'
 import loader from './loader'
 import useLogger from './logger'
 
-const logger = useLogger('validate-config')
+const logger = useLogger('friday:config')
 
 export default function validateConfig(): void {
   const configDir = config.util.getEnv('NODE_CONFIG_DIR')
-  const shemaFilePath = path.join(configDir, 'schema.json')
+  const schemaFilePath = path.join(configDir, 'schema.json')
   const configurations = config.util.loadFileConfigs()
 
   let schema
 
   try {
-    schema = loader(shemaFilePath)
+    schema = loader(schemaFilePath)
   } catch (err) {
     logger.warn(
-      `Skip the verification of your configurations because there is no config schema file in ${shemaFilePath}.`
+      `Skip the verification of your configurations because there is no config schema file in ${schemaFilePath}.`
     )
     return
   }
