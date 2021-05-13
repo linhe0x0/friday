@@ -13,7 +13,7 @@
     "lint": "npm run type-check && eslint --ext ts ./src",
     "lint-with-fix": "eslint --ext ts --fix ./src",
     "type-check": "tsc --noEmit",
-    "test": "npm run build && jest ./dist",
+    "test": "jest ./dist",
     "test:coverage": "jest --coverage ./dist",
     "prepublishOnly": "npm run build"
   },
