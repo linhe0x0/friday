@@ -161,15 +161,18 @@ ${conflictMessage}
         url,
         ...middleware,
         async (ctx: Koa.Context): Promise<void> => {
-          if (!_.isEmpty(schema)) {
+          const hasSchema = !_.isEmpty(schema)
+
+          if (hasSchema) {
+            const s = _.defaults(schema, {
+              type: 'object',
+            })
+            const d = _.assign({}, ctx.params, ctx.query, ctx.request.body)
+
             try {
-              validate(
-                schema,
-                _.assign({}, ctx.params, ctx.query, ctx.request.body)
-              )
+              validate(s, d)
             } catch (err) {
               ctx.throw(400, err)
-              return
             }
           }
 
