@@ -15,13 +15,12 @@ import requestIDMiddleware from './middleware/request-id'
 import * as router from './router'
 import { getOptionalConfig } from './services/config'
 import { validate } from './services/validator'
+import { getEntrySetupFun } from './utilities/entry'
 import isDebug from './utilities/is-debug'
 import useLogger from './utilities/logger'
 import validateConfig from './utilities/validate-config'
 
 const logger = useLogger('friday')
-
-const app = new Koa()
 
 if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
   logger.warn(
@@ -45,10 +44,16 @@ if (isDebugMode) {
 // Check if the config schema file exists and validate user configurations.
 validateConfig()
 
+let app = new Koa()
+
 /**
  * Extends properties or methods to ctx to be used across the entire app
  */
 app.context.validate = validate
+
+const setup = getEntrySetupFun()
+
+app = setup(app)
 
 app.use(errorHandlerMiddleware)
 
@@ -135,4 +140,5 @@ app.on('error', (err, ctx) => {
   logger.withError(err).error(payload, 'server error: %s', err.message)
 })
 
-export default app
+// Export immutable binding
+export const application = app

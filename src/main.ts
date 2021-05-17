@@ -23,4 +23,4 @@ export {
 } from './services/config'
 
 // App must be exported last due to side effect of router register.
-export { default as app } from './app'
+export { application as app } from './app'

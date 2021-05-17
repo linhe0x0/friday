@@ -1,6 +1,9 @@
+import consola from 'consola'
 import fs from 'fs'
+import Koa from 'koa'
 import path from 'path'
 
+import loader from './loader'
 import { pkgInfo } from './pkg'
 
 let filepath = pkgInfo.main || 'app.js'
@@ -15,3 +18,22 @@ if (!fs.existsSync(filepath)) {
 }
 
 export const entry = filepath
+
+type entrySetupFun = (app: Koa) => Koa
+
+export function getEntrySetupFun(): entrySetupFun {
+  let fun: unknown
+
+  try {
+    fun = loader(entry)
+  } catch (err) {
+    process.exit(1)
+  }
+
+  if (typeof fun !== 'function') {
+    consola.error(`The file "${entry}" does not export a default function.`)
+    process.exit(1)
+  }
+
+  return fun as entrySetupFun
+}
