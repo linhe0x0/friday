@@ -1,26 +1,25 @@
-export * from './dist/main'
+import * as Koa from 'koa'
 
-declare namespace Friday {
+declare module '@sqrtthree/friday' {
+  export interface Context extends Koa.Context {}
+
   /**
    * Response
    */
   type DefaultResponseExtends = any
-
   interface DefaultResponse extends DefaultResponseExtends {}
-
-  type FridayApiResponse<T = DefaultResponse> = Promise<
+  export type APIResponse<T = DefaultResponse> = Promise<
     T | string | null | undefined
   >
 
   /**
    * Validation
    */
-  interface ValidateSchema {
+  interface ValidationSchema {
     required?: string[]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     properties: Record<string, any>
   }
-  interface Schema extends ValidateSchema {}
+  export interface Schema extends ValidationSchema {}
 }
 
-export default Friday
+export * from './dist/main'
