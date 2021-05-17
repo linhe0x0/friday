@@ -3,7 +3,7 @@ import path from 'path'
 
 import { pkgInfo } from './pkg'
 
-let filepath = pkgInfo.main || 'dist/app.js'
+let filepath = pkgInfo.main || 'app.js'
 
 if (filepath[0] !== '/') {
   filepath = path.resolve(process.cwd(), filepath)
