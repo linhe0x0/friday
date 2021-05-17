@@ -22,5 +22,5 @@ export {
   getConfigWithDefault,
 } from './services/config'
 
-// App must be exported after useLogger due to side effect of router register.
+// App must be exported last due to side effect of router register.
 export { default as app } from './app'
