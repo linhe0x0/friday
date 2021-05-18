@@ -18,11 +18,10 @@ declare module '@sqrtthree/friday' {
   /**
    * Validation
    */
-  interface ValidationSchema {
+  export interface ValidationSchema {
     required?: string[]
     properties: Record<string, any>
   }
-  export interface Schema extends ValidationSchema {}
 }
 
 export * from './dist/main'
