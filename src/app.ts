@@ -56,6 +56,8 @@ const setup = getEntrySetupFun()
 
 app = setup(app)
 
+emitHook('onLoad', app)
+
 app.use(errorHandlerMiddleware)
 
 /**

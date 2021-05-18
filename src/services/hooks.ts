@@ -2,6 +2,8 @@ import Koa from 'koa'
 import _ from 'lodash'
 
 type HookType =
+  | 'beforeReload'
+  | 'onLoad'
   | 'onInit'
   | 'onReady'
   | 'beforeClose'
