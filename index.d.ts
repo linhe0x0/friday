@@ -1,6 +1,9 @@
 import * as Koa from 'koa'
 
 declare module '@sqrtthree/friday' {
+  /**
+   * Context
+   */
   export interface Context extends Koa.Context {}
 
   /**
