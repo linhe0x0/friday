@@ -22,5 +22,7 @@ export {
   getConfigWithDefault,
 } from './services/config'
 
+export * as hooks from './services/hooks'
+
 // App must be exported last due to side effect of router register.
 export { application as app } from './app'

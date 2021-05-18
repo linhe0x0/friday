@@ -14,7 +14,8 @@
     "lint-with-fix": "eslint --ext ts --fix ./src",
     "type-check": "tsc --noEmit",
     "test": "npm run build && jest ./dist",
-    "test:coverage": "jest --coverage ./dist",
+    "test:local": "jest -o ./dist",
+    "test:cov": "jest --coverage ./dist",
     "prepublishOnly": "npm run build"
   },
   "repository": {
