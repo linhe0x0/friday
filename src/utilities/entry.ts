@@ -35,5 +35,12 @@ export function getEntrySetupFun(): entrySetupFun {
     process.exit(1)
   }
 
+  const isAsyncFunction = fun.constructor.name === 'AsyncFunction'
+
+  if (isAsyncFunction) {
+    consola.error('setup function must not be async function.')
+    process.exit(1)
+  }
+
   return fun as entrySetupFun
 }
