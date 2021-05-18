@@ -14,6 +14,7 @@ import loggerMiddleware from './middleware/logger'
 import requestIDMiddleware from './middleware/request-id'
 import * as router from './router'
 import { getOptionalConfig } from './services/config'
+import { emitHook } from './services/hooks'
 import { validate } from './services/validator'
 import { getEntrySetupFun } from './utilities/entry'
 import isDebug from './utilities/is-debug'
@@ -126,6 +127,8 @@ router.mount(app, {
  * Catch errors.
  */
 app.on('error', (err, ctx) => {
+  emitHook('onError', app)
+
   if (process.env.FRIDAY_ENV === 'development') {
     return
   }
@@ -139,6 +142,8 @@ app.on('error', (err, ctx) => {
 
   logger.withError(err).error(payload, 'server error: %s', err.message)
 })
+
+emitHook('onInit', app)
 
 // Export immutable binding
 export const application = app
