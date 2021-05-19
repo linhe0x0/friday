@@ -4,14 +4,14 @@ import _ from 'lodash'
 
 import { TypeValidateError } from '../types/errors'
 
-interface ValidateSchema {
+interface ValidationSchema {
   required?: string[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: Record<string, any>
 }
 
 export function validate(
-  schema: ValidateSchema,
+  schema: ValidationSchema,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
