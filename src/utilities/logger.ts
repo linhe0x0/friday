@@ -15,19 +15,19 @@ interface LoggingMethodOptions {
 
 export function loggerGenerator(
   name: string,
-  labels?: Record<string, string>,
-  mixin?: () => Record<string, string>
+  labels?: Record<string, string | number>,
+  mixin?: pino.MixinFn
 ): pino.Logger {
   const isDebugMode = isDebug()
 
-  let logLevel = isDebugMode ? 'trace' : 'info'
+  let logLevel: pino.LevelWithSilent = isDebugMode ? 'trace' : 'info'
 
   if (config.has('logger.level')) {
     logLevel = config.get('logger.level')
   }
 
   if (process.env.LOGGER_LEVEL) {
-    logLevel = process.env.LOGGER_LEVEL
+    logLevel = process.env.LOGGER_LEVEL as pino.Level
   }
 
   if (process.env.NODE_ENV === 'test' || process.env.NODE_ENV === 'testing') {
@@ -39,6 +39,12 @@ export function loggerGenerator(
     pid: process.pid,
   }
   const baseLabels = _.assign(defaultBaseLabels, labels)
+  const prettyPrint = isDebugMode
+    ? {
+        translateTime: 'SYS:HH:MM:ss',
+        ignore: _.join(_.keys(defaultBaseLabels), ','),
+      }
+    : false
 
   const logger = pino({
     name,
@@ -47,35 +53,31 @@ export function loggerGenerator(
     mixin,
     nestedKey: 'context',
     timestamp: pino.stdTimeFunctions.isoTime,
-    prettyPrint: isDebugMode
-      ? {
-          translateTime: 'SYS:HH:MM:ss',
-          ignore: _.join(_.keys(defaultBaseLabels), ','),
-        }
-      : false,
+    prettyPrint,
   })
 
   return logger
 }
 
+type loggerContext = Record<string | number, any>
+
 class Logger {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  logger: any = null
+  private logger: pino.Logger
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  context?: Record<string, any> = undefined
+  private context?: loggerContext = undefined
 
-  err?: Error = undefined
+  private err?: Error = undefined
 
   constructor(
     name: string,
-    labels?: Record<string, string>,
-    mixin?: () => Record<string, string>
+    labels?: Record<string, string | number>,
+    mixin?: pino.MixinFn
   ) {
     this.logger = loggerGenerator(name, labels, mixin)
   }
 
-  caller(
+  private caller(
     method: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     mergingObject?: Record<string, any>,
@@ -108,51 +110,43 @@ class Logger {
       })
     }
 
+    const fn: pino.LogFn = this.logger[method]
+
     if (_.isEmpty(options.mergingObject)) {
-      this.logger[method].call(
-        this.logger,
-        options.message,
-        ...options.interpolationValues
-      )
+      fn(options.message, ...options.interpolationValues)
     } else {
-      this.logger[method].call(
-        this.logger,
-        options.mergingObject,
-        options.message,
-        ...options.interpolationValues
-      )
+      fn(options.mergingObject, options.message, ...options.interpolationValues)
     }
 
     this.context = undefined
     this.err = undefined
   }
 
-  trace(...args) {
+  trace: pino.LogFn = (...args) => {
     this.caller('trace', ...args)
   }
 
-  debug(...args) {
+  debug: pino.LogFn = (...args) => {
     this.caller('debug', ...args)
   }
 
-  info(...args) {
+  info: pino.LogFn = (...args) => {
     this.caller('info', ...args)
   }
 
-  warn(...args) {
+  warn: pino.LogFn = (...args) => {
     this.caller('warn', ...args)
   }
 
-  error(...args) {
+  error: pino.LogFn = (...args) => {
     this.caller('error', ...args)
   }
 
-  fatal(...args) {
+  fatal: pino.LogFn = (...args) => {
     this.caller('fatal', ...args)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  withContext(payload: Record<string, any>) {
+  withContext(payload: loggerContext) {
     this.context = payload
 
     return this
