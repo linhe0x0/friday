@@ -22,7 +22,7 @@ export default function access(
     }
   }
 
-  ctx.logger.info(`[${ctx.method}] ${ctx.url} ${bodyString}`)
+  ctx.logger.info(`Request Body: ${bodyString}`)
 
   return next()
 }
