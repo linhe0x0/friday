@@ -87,7 +87,6 @@ const bodyParserOptions = getOptionalConfig<bodyParser.Options>('bodyParser')
 const bodyParserMiddleware = bodyParser(_.assign({}, bodyParserOptions))
 
 addMiddleware(bodyParserMiddleware, 10)
-
 addMiddleware(requestIDMiddleware, 10)
 addMiddleware(loggerMiddleware, 10)
 
