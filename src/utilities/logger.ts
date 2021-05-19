@@ -110,7 +110,7 @@ class Logger {
       })
     }
 
-    const fn: pino.LogFn = this.logger[method]
+    const fn: pino.LogFn = this.logger[method].bind(this.logger)
 
     if (_.isEmpty(options.mergingObject)) {
       fn(options.message, ...options.interpolationValues)
