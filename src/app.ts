@@ -15,6 +15,7 @@ import requestIDMiddleware from './middleware/request-id'
 import * as router from './router'
 import { getOptionalConfig } from './services/config'
 import { emitHook } from './services/hooks'
+import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
 import { getEntrySetupFun } from './utilities/entry'
 import isDebug from './utilities/is-debug'
@@ -67,29 +68,31 @@ if (cookieKeys) {
   app.keys = cookieKeys
 }
 
-app.use(errorHandlerMiddleware)
+addMiddleware(errorHandlerMiddleware, 100)
 
 /**
  * Help secure the app with various HTTP headers by helmet.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const helmetOptions = getOptionalConfig<any>('helmet')
+const helmetMiddleware = helmet(helmetOptions)
 
-app.use(helmet(helmetOptions))
+addMiddleware(helmetMiddleware, 10)
 
 /**
  * Mount body-parser middleware.
  */
 const bodyParserOptions = getOptionalConfig<bodyParser.Options>('bodyParser')
-
 // Assign a new value due to the value from config.get() is immutable.
-app.use(bodyParser(_.assign({}, bodyParserOptions)))
+const bodyParserMiddleware = bodyParser(_.assign({}, bodyParserOptions))
 
-app.use(requestIDMiddleware)
-app.use(loggerMiddleware)
+addMiddleware(bodyParserMiddleware, 10)
+
+addMiddleware(requestIDMiddleware, 10)
+addMiddleware(loggerMiddleware, 10)
 
 if (!isDebugMode) {
-  app.use(accessMiddleware)
+  addMiddleware(accessMiddleware, 10)
 }
 
 /**
@@ -108,8 +111,9 @@ if (!staticRootDirectory) {
 }
 
 const staticOptions = _.defaults(_.get(staticConfig, 'options'), {})
+const staticMiddleware = serve(staticRootDirectory, staticOptions)
 
-app.use(serve(staticRootDirectory, staticOptions))
+addMiddleware(staticMiddleware, 10)
 
 /**
  * Use cors middleware
@@ -117,15 +121,23 @@ app.use(serve(staticRootDirectory, staticOptions))
 const corsConfig = getOptionalConfig('cors')
 
 if (isDebugMode || corsConfig) {
-  app.use(cors(corsConfig))
+  const corsMiddleware = cors(corsConfig)
+
+  addMiddleware(corsMiddleware, 10)
 }
 
 /**
  * Use debug middleware when running in development env.
  */
 if (process.env.FRIDAY_ENV === 'development') {
-  app.use(debugMiddleware)
+  addMiddleware(debugMiddleware, 10)
 }
+
+const allMiddlewareList = getMiddlewareList()
+
+allMiddlewareList.forEach((item) => {
+  app.use(item.mid)
+})
 
 /**
  * Register routes.
