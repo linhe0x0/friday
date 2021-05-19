@@ -19,3 +19,9 @@ test('load ESModule js file', () => {
 
   expect(typeof js === 'function').toBeTruthy()
 })
+
+test('load non existent file', () => {
+  expect(() => {
+    loader(path.resolve(__dirname, './a.js'))
+  }).toThrow()
+})
