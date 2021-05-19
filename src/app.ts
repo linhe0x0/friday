@@ -58,6 +58,15 @@ app = setup(app)
 
 emitHook('onLoad', app)
 
+/**
+ * Set signed cookie keys.
+ */
+const cookieKeys = getOptionalConfig<string[]>('keys')
+
+if (cookieKeys) {
+  app.keys = cookieKeys
+}
+
 app.use(errorHandlerMiddleware)
 
 /**
