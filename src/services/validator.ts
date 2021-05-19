@@ -1,13 +1,17 @@
-import Ajv, { DefinedError } from 'ajv'
+import Ajv, { DefinedError, ErrorObject } from 'ajv'
 import ajvErrors from 'ajv-errors'
 import _ from 'lodash'
-
-import { TypeValidateError } from '../types/errors'
 
 interface ValidationSchema {
   required?: string[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: Record<string, any>
+}
+
+interface TypeValidateError extends Error {
+  status: number
+  statusCode: number
+  errors: ErrorObject[] | null | undefined
 }
 
 export function validate(

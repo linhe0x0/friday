@@ -2,7 +2,15 @@ import http from 'http'
 import Koa from 'koa'
 import _ from 'lodash'
 
-import { ErrorResponse } from '../types/errors'
+interface ErrorResponse {
+  requestID: string
+  code?: number | string
+  message: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data?: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  errors?: any[]
+}
 
 export default async function errorHandlerMiddleware(
   ctx: Koa.Context,

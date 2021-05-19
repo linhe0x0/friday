@@ -4,8 +4,6 @@ import Koa from 'koa'
 import _ from 'lodash'
 import PrettyError from 'pretty-error'
 
-import { KoaError } from '../types/errors'
-
 const pe = new PrettyError()
 
 let requestCount = 0
@@ -59,6 +57,11 @@ const logResponse = (ctx: Koa.Context, duration: number): void => {
   if (!isHTMLResponse) {
     consola.log(ctx.body)
   }
+}
+
+interface KoaError extends Error {
+  status?: number
+  statusCode?: number
 }
 
 const logError = (err: KoaError): void => {
