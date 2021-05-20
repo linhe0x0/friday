@@ -59,12 +59,12 @@ export function loggerGenerator(
   return logger
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type loggerContext = Record<string | number, any>
 
 class Logger {
   private logger: pino.Logger
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private context?: loggerContext = undefined
 
   private err?: Error = undefined
