@@ -41,7 +41,7 @@ export function validate(
   err.statusCode = 400
 
   err.errors = _.map(validator.errors as DefinedError[], (item) => {
-    const dataPath = item.dataPath.replace(/\//g, '.')
+    const dataPath = item.instancePath.replace(/\//g, '.')
 
     return _.assign({}, item, {
       dataPath,
