@@ -1,3 +1,5 @@
+import Koa from 'koa'
+
 /**
  * Errors
  */
@@ -32,5 +34,9 @@ export * as hooks from './services/hooks'
  */
 export * as middleware from './services/middleware'
 
-// App must be exported last due to side effect of router register.
-export { application as app } from './app'
+export function createApp(): Koa {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires,global-require
+  const { application } = require('./app')
+
+  return application
+}
