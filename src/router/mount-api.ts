@@ -32,6 +32,10 @@ const ignoredFile = (filename: string): boolean => {
     return true
   }
 
+  if (_.endsWith(filename, '.spec.js')) {
+    return true
+  }
+
   return false
 }
 
