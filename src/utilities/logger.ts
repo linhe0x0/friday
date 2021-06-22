@@ -49,6 +49,7 @@ export function loggerGenerator(
   const logger = pino({
     name,
     level: logLevel,
+    useLevelLabels: true,
     base: baseLabels,
     mixin,
     nestedKey: 'context',
