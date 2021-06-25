@@ -33,8 +33,9 @@ if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
 }
 
 const isDebugMode = isDebug()
+const restarted = process.env.FRIDAY_RESTARTED === 'true'
 
-if (isDebugMode) {
+if (isDebugMode && !restarted) {
   logger.debug(
     `Running in "debug" mode. It's better to switch to "production" mode if you are in production environment.`
   )
