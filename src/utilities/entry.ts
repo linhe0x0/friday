@@ -27,6 +27,7 @@ export function getEntrySetupFun(): entrySetupFun {
   try {
     fun = loader(entry)
   } catch (err) {
+    consola.error(err)
     process.exit(1)
   }
 
