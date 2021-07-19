@@ -17,10 +17,10 @@ import { getOptionalConfig } from './services/config'
 import { emitHook } from './services/hooks'
 import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
+import { validateConfig } from './utilities/config-schema'
 import { getEntrySetupFun } from './utilities/entry'
 import isDebug from './utilities/is-debug'
 import useLogger from './utilities/logger'
-import validateConfig from './utilities/validate-config'
 
 const logger = useLogger('friday')
 
@@ -44,9 +44,6 @@ if (isDebugMode && !restarted) {
   logger.debug('')
 }
 
-// Check if the config schema file exists and validate user configurations.
-validateConfig()
-
 let app = new Koa()
 
 /**
@@ -57,6 +54,9 @@ app.context.validate = validate
 const setup = getEntrySetupFun()
 
 app = setup(app)
+
+// Check if the config schema file exists and validate user configurations.
+validateConfig()
 
 emitHook('onLoad', app)
 

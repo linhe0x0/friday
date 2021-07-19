@@ -2,7 +2,7 @@ import Ajv, { DefinedError, ErrorObject } from 'ajv'
 import ajvErrors from 'ajv-errors'
 import _ from 'lodash'
 
-interface ValidationSchema {
+export interface ValidationSchema {
   required?: string[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: Record<string, any>

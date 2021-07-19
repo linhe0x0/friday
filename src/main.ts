@@ -14,6 +14,7 @@ export { default as useLogger } from './utilities/logger'
  */
 export { default as validator } from './services/validator'
 export { validate } from './services/validator'
+export { addConfigSchema } from './utilities/config-schema'
 
 /**
  * Config
