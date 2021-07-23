@@ -14,6 +14,8 @@ export function addMiddleware(mid: Koa.Middleware, weight?: number): void {
   })
 }
 
+export const use = addMiddleware
+
 export function getMiddlewareList(): MiddlewareItem[] {
   return middleware.sort((prev, next) => {
     return next.weight - prev.weight
