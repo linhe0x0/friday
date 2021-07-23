@@ -37,7 +37,7 @@ describe('emitHook', () => {
 
     const app = new Koa()
 
-    await emitHook('onReady', app)
+    emitHook('onReady', app)
 
     expect(getHook('onReady').length).toBe(1)
     expect(count).toBe(1)
@@ -46,7 +46,7 @@ describe('emitHook', () => {
   test('emit nonexistent hook', async () => {
     const app = new Koa()
 
-    await emitHook('onReady', app)
+    emitHook('onReady', app)
 
     expect(getHook('onReady').length).toBe(0)
   })
