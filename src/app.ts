@@ -166,6 +166,30 @@ app.on('error', (err, ctx) => {
   logger.withError(err).error(payload, 'server error: %s', err.message)
 })
 
+/**
+ * Handle process signals.
+ */
+// Handle warnings
+process.on('warning', (warning) => {
+  logger.warn(warning)
+})
+
+// Handle uncaught promises
+process.on('unhandledRejection', (err) => {
+  if (err instanceof Error) {
+    logger.withError(err).error(`Unhandled Rejection: ${err.message}`)
+  } else {
+    logger.error('Unhandled Rejection: %s', err)
+  }
+})
+
+// Handle uncaught exceptions
+// Logger error and exit the process, does not exit gracefully.
+process.once('uncaughtException', (err) => {
+  logger.fatal(err)
+  process.exit(1)
+})
+
 emitHook('onInit', app)
 
 // Export immutable binding
