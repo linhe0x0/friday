@@ -137,9 +137,17 @@ ${conflictMessage}
     const handler = loader(filePath)
 
     if (typeof handler !== 'function') {
-      throw new Error(
-        `Failed to load your routes from ${filePath}. Expect function but got ${typeof handler}.`
-      )
+      const isEmptyObject = _.isEqual(handler, {})
+
+      if (isEmptyObject) {
+        logger.warn(
+          `Expect function but got nothing when loading routes from ${filePath}. The file will be ignored.`
+        )
+      } else {
+        throw new Error(
+          `Failed to load your routes from ${filePath}. Expect function but got ${typeof handler}.`
+        )
+      }
     }
 
     const { schema, middleware } = handler || {}
