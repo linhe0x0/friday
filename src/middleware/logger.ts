@@ -2,10 +2,10 @@ import Koa from 'koa'
 import _ from 'lodash'
 import { v3 as uuidv3, v4 as uuidv4 } from 'uuid'
 
-import isDebug from '../utilities/is-debug'
+import { isDebugMode } from '../utilities/env'
 import useLogger from '../utilities/logger'
 
-const isDebugMode = isDebug()
+const isDebug = isDebugMode()
 
 export default function loggerMiddleware(
   ctx: Koa.Context,
@@ -16,7 +16,7 @@ export default function loggerMiddleware(
     ctx.state.requestID ||
     uuidv3(Date.now().toString(), uuidv4())
 
-  if (isDebugMode) {
+  if (isDebug) {
     const shortRequestID = _.first(_.split(requestID, '-'))
 
     ctx.logger = useLogger(`request[${shortRequestID}]`)

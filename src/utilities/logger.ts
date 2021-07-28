@@ -3,7 +3,7 @@ import _ from 'lodash'
 import os from 'os'
 import pino from 'pino'
 
-import isDebug from './is-debug'
+import { isDebugMode } from './env'
 
 interface LoggingMethodOptions {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,9 +18,9 @@ export function loggerGenerator(
   labels?: Record<string, string | number>,
   mixin?: pino.MixinFn
 ): pino.Logger {
-  const isDebugMode = isDebug()
+  const isDebug = isDebugMode()
 
-  let logLevel: pino.LevelWithSilent = isDebugMode ? 'trace' : 'info'
+  let logLevel: pino.LevelWithSilent = isDebug ? 'trace' : 'info'
 
   if (config.has('logger.level')) {
     logLevel = config.get('logger.level')
@@ -39,7 +39,7 @@ export function loggerGenerator(
     pid: process.pid,
   }
   const baseLabels = _.assign(defaultBaseLabels, labels)
-  const prettyPrint = isDebugMode
+  const prettyPrint = isDebug
     ? {
         translateTime: 'SYS:HH:MM:ss',
         ignore: _.join(_.keys(defaultBaseLabels), ','),

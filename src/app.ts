@@ -19,7 +19,7 @@ import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
 import { validateConfig } from './utilities/config-schema'
 import { getEntrySetupFun } from './utilities/entry'
-import isDebug from './utilities/is-debug'
+import { isDebugMode } from './utilities/env'
 import useLogger from './utilities/logger'
 
 const logger = useLogger('friday')
@@ -32,10 +32,10 @@ if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
   )
 }
 
-const isDebugMode = isDebug()
+const isDebug = isDebugMode()
 const restarted = process.env.FRIDAY_RESTARTED === 'true'
 
-if (isDebugMode && !restarted) {
+if (isDebug && !restarted) {
   logger.debug(
     `Running in "debug" mode. It's better to switch to "production" mode if you are in production environment.`
   )
@@ -120,7 +120,7 @@ addMiddleware(staticMiddleware, 10)
  */
 const corsConfig = getOptionalConfig('cors')
 
-if (isDebugMode || corsConfig) {
+if (isDebug || corsConfig) {
   const corsMiddleware = cors(corsConfig)
 
   addMiddleware(corsMiddleware, 10)
@@ -143,7 +143,7 @@ allMiddlewareList.forEach((item) => {
  * Register routes.
  */
 router.mount(app, {
-  debug: isDebugMode,
+  debug: isDebug,
 })
 
 /**
