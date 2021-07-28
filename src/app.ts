@@ -19,7 +19,7 @@ import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
 import { validateConfig } from './utilities/config-schema'
 import { getEntrySetupFun } from './utilities/entry'
-import { isDebugMode } from './utilities/env'
+import { isDebugMode, isInitialStart } from './utilities/env'
 import useLogger from './utilities/logger'
 
 const logger = useLogger('friday')
@@ -33,9 +33,9 @@ if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
 }
 
 const isDebug = isDebugMode()
-const restarted = process.env.FRIDAY_RESTARTED === 'true'
+const initialStart = isInitialStart()
 
-if (isDebug && !restarted) {
+if (isDebug && initialStart) {
   logger.debug(
     `Running in "debug" mode. It's better to switch to "production" mode if you are in production environment.`
   )

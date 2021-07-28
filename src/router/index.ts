@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 import Router from '@koa/router'
 
+import { isInitialStart } from '../utilities/env'
 import useLogger from '../utilities/logger'
 import helpfulRouter from './helpful-router'
 import mountApi from './mount-api'
@@ -47,7 +48,9 @@ export function mount(app: Koa, options?: Partial<MountOptions>) {
   app.use(router.routes())
   app.use(router.allowedMethods())
 
-  if (opts.debug) {
+  const initialStart = isInitialStart()
+
+  if (opts.debug && initialStart) {
     outputRoutes(router)
   }
 
