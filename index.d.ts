@@ -1,4 +1,5 @@
 import * as Koa from 'koa'
+import { Stream } from 'stream'
 
 /**
  * Logger
@@ -48,7 +49,7 @@ declare module '@sqrtthree/friday' {
   type DefaultResponseExtends = any
   interface DefaultResponse extends DefaultResponseExtends {}
   export type APIResponse<T = DefaultResponse> = Promise<
-    T | string | null | undefined
+    T | string | Buffer | Stream | null | undefined
   >
 
   /**
