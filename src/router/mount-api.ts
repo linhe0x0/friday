@@ -195,10 +195,7 @@ ${conflictMessage}
           }
 
           const redirect =
-            _.isString(body) &&
-            isURL(body, {
-              require_host: false,
-            })
+            _.isString(body) && isURL(body, { require_host: false })
 
           if (redirect) {
             ctx.redirect(body)
