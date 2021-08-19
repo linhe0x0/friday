@@ -7,36 +7,6 @@ import PrettyError from 'pretty-error'
 
 const pe = new PrettyError()
 
-const extOfStaticFiles = [
-  '.ico',
-  '.svg',
-  '.jpg',
-  '.jpeg',
-  '.png',
-  '.gif',
-  '.bmp',
-  '.wbmp',
-  '.webp',
-  '.tif',
-  '.psd',
-  '.svg',
-  '.js',
-  '.jsx',
-  '.json',
-  '.css',
-  '.less',
-  '.html',
-  '.htm',
-  '.xml',
-  '.zip',
-  '.gz',
-  '.tgz',
-  '.gzip',
-  '.mp3',
-  '.mp4',
-  '.avi',
-]
-
 let requestCount = 0
 
 const newLine = (): void => {
@@ -114,10 +84,10 @@ export default async function debugMiddleware(
   ctx: Koa.Context,
   next: Koa.Next
 ): Promise<void> {
-  const ext = path.extname(ctx.url)
-  const staticFile = _.includes(extOfStaticFiles, ext)
+  const ext = path.extname(ctx.path)
+  const isStaticFile = !!ext
 
-  if (staticFile) {
+  if (isStaticFile) {
     // Ignore request of static file by default.
     return next()
   }
