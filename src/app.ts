@@ -143,7 +143,7 @@ allMiddlewareList.forEach((item) => {
  * Register routes.
  */
 router.mount(app, {
-  debug: isDebug,
+  debug: isDebug && initialStart,
 })
 
 /**
