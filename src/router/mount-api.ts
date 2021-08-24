@@ -145,11 +145,13 @@ ${conflictMessage}
         logger.warn(
           `Expect function but got nothing when loading routes from ${filePath}. The file will be ignored.`
         )
-      } else {
-        throw new Error(
-          `Failed to load your routes from ${filePath}. Expect function but got ${typeof handler}.`
-        )
+
+        return null
       }
+
+      throw new Error(
+        `Failed to load your routes from ${filePath}. Expect function but got ${typeof handler}.`
+      )
     }
 
     return {
@@ -163,6 +165,10 @@ ${conflictMessage}
 
   return function mount(router) {
     _.forEach(routes, (item) => {
+      if (!item) {
+        return
+      }
+
       const { method, url, schema, middleware, handler } = item
 
       if (!router[method]) {
