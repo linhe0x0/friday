@@ -134,7 +134,9 @@ ${conflictMessage}
 
   const routes = _.map(routeUrlList, (item) => {
     const filePath = path.resolve(apiDir, item.file)
-    const handler = loader(filePath)
+    const route = loader(filePath)
+    const { schema, middleware } = route
+    const handler = route.handler || route.default
 
     if (typeof handler !== 'function') {
       const isEmptyObject = _.isEqual(handler, {})
@@ -149,8 +151,6 @@ ${conflictMessage}
         )
       }
     }
-
-    const { schema, middleware } = handler || {}
 
     return {
       method: item.method,

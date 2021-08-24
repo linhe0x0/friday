@@ -25,7 +25,7 @@ export function getEntrySetupFun(): entrySetupFun {
   let fun: unknown
 
   try {
-    fun = loader(entry)
+    fun = loader(entry).default
   } catch (err) {
     consola.error(err)
     process.exit(1)

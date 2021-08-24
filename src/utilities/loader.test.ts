@@ -9,15 +9,19 @@ test('load json file', () => {
 })
 
 test('load common js file', () => {
-  const js = loader(path.resolve(__dirname, './root-dir.js'))
+  const js = loader(path.resolve(__dirname, './pkg.js'))
 
-  expect(typeof js === 'object').toBeTruthy()
+  expect(typeof js).toBe('object')
+  expect(js.default).toBeDefined()
+  expect(js.pkgInfo).toBeDefined()
+  expect(js.default.pkgInfo).toBe(js.pkgInfo)
 })
 
 test('load ESModule js file', () => {
   const js = loader(path.resolve(__dirname, './loader.js'))
 
-  expect(typeof js === 'function').toBeTruthy()
+  expect(js.default).toBeDefined()
+  expect(typeof js.default).toBe('function')
 })
 
 test('load non existent file', () => {
