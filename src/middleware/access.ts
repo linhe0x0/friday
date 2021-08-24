@@ -6,15 +6,14 @@ export default function access(
 ): Promise<void> {
   const contentLength = parseInt(ctx.headers['content-length'] || '0', 10)
   const contentType = ctx.headers['content-type'] || ''
-  let bodyString = ''
+  const json = contentType.indexOf('application/json') === 0
+  const query = JSON.stringify(ctx.query)
 
-  if (contentLength > 0 && contentType.indexOf('application/json') === 0) {
+  let body = ''
+
+  if (contentLength > 0 && json) {
     try {
-      const { body } = ctx.request
-
-      if (body) {
-        bodyString = JSON.stringify(body)
-      }
+      body = JSON.stringify(ctx.request.body || {})
     } catch (err) {
       ctx.logger
         .withError(err)
@@ -22,7 +21,7 @@ export default function access(
     }
   }
 
-  ctx.logger.info(`Request Body: ${bodyString}`)
+  ctx.logger.info(`Request query: ${query}, Request body: ${body}`)
 
   return next()
 }
