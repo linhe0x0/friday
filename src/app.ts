@@ -24,18 +24,18 @@ import useLogger from './utilities/logger'
 
 const logger = useLogger('friday')
 
-if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
-  logger.warn(
-    `Running in "${
-      process.env.NODE_ENV || 'development'
-    }" env. you can remove this warning by export NODE_ENV=production`
-  )
-}
-
 const isDebug = isDebugMode()
 const initialStart = isInitialStart()
 
 if (isDebug && initialStart) {
+  if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
+    logger.warn(
+      `Running in "${
+        process.env.NODE_ENV || 'development'
+      }" env. you can remove this warning by export NODE_ENV=production`
+    )
+  }
+
   logger.debug(
     `Running in "debug" mode. It's better to switch to "production" mode if you are in production environment.`
   )
