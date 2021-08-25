@@ -3,6 +3,7 @@ import _ from 'lodash'
 import path from 'path'
 
 import { validate, ValidationSchema } from '../services/validator'
+import { isInitialStart } from './env'
 import loader from './loader'
 import useLogger from './logger'
 
@@ -28,7 +29,11 @@ export function validateConfig(): void {
 
     addConfigSchema(schema)
   } catch (err) {
-    logger.warn(`there is no config schema file in ${schemaFilePath}.`)
+    const initialStart = isInitialStart()
+
+    if (initialStart) {
+      logger.warn(`there is no config schema file in ${schemaFilePath}.`)
+    }
   }
 
   _.forEach(schemas, (schema) => {
