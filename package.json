@@ -21,10 +21,7 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "files": [
-    "dist",
-    "index.d.ts"
-  ],
+  "files": ["dist", "index.d.ts"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sqrthree/friday.git"
@@ -45,11 +42,11 @@
     "@koa/cors": "~3.1.0",
     "@koa/router": "~10.0.0",
     "@types/koa": "~2.13.4",
-    "@types/koa-bodyparser": "~4.3.2",
+    "@types/koa-bodyparser": "~4.3.3",
     "@types/node": "~16.3.3",
     "ajv": "~8.6.2",
     "ajv-errors": "~3.0.0",
-    "chalk": "~4.1.1",
+    "chalk": "~4.1.2",
     "config": "~3.3.6",
     "consola": "~2.15.3",
     "glob": "~7.1.6",
@@ -60,7 +57,7 @@
     "koa-static": "^5.0.0",
     "lodash": "~4.17.21",
     "pino": "~6.12.0",
-    "pino-pretty": "~5.1.2",
+    "pino-pretty": "~5.1.3",
     "pretty-error": "~3.0.4",
     "pretty-ms": "~7.0.1",
     "uuid": "~8.3.2",
@@ -71,10 +68,10 @@
     "@sqrtthree/prettier-config": "^2.0.1",
     "@sqrtthree/tsconfig": "~1.0.0",
     "@types/jest": "~26.0.24",
-    "@types/lodash": "~4.14.171",
-    "@types/pino": "~6.3.9",
+    "@types/lodash": "~4.14.172",
+    "@types/pino": "~6.3.11",
     "eslint": "~7.31.0",
-    "husky": "~7.0.1",
+    "husky": "~7.0.2",
     "jest": "~27.0.6",
     "lint-staged": "~11.0.1",
     "prettier": "~2.3.2",
