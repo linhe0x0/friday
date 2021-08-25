@@ -1,9 +1,18 @@
 import Koa from 'koa'
 
+import { isStaticFile } from '../utilities/fs'
+
 export default function access(
   ctx: Koa.Context,
   next: Koa.Next
 ): Promise<void> {
+  const staticFile = isStaticFile(ctx.path)
+
+  if (staticFile) {
+    // Ignore request of static file by default.
+    return next()
+  }
+
   const contentLength = parseInt(ctx.headers['content-length'] || '0', 10)
   const contentType = ctx.headers['content-type'] || ''
   const json = contentType.indexOf('application/json') === 0

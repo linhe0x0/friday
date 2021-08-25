@@ -2,8 +2,9 @@ import chalk from 'chalk'
 import consola from 'consola'
 import Koa from 'koa'
 import _ from 'lodash'
-import path from 'path'
 import PrettyError from 'pretty-error'
+
+import { isStaticFile } from '../utilities/fs'
 
 const pe = new PrettyError()
 
@@ -84,10 +85,9 @@ export default async function debugMiddleware(
   ctx: Koa.Context,
   next: Koa.Next
 ): Promise<void> {
-  const ext = path.extname(ctx.path)
-  const isStaticFile = !!ext
+  const staticFile = isStaticFile(ctx.path)
 
-  if (isStaticFile) {
+  if (staticFile) {
     // Ignore request of static file by default.
     return next()
   }
