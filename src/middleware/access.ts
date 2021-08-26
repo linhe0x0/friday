@@ -18,7 +18,7 @@ export default function access(
   const json = contentType.indexOf('application/json') === 0
   const query = JSON.stringify(ctx.query)
 
-  let body = ''
+  let body = '{}'
 
   if (contentLength > 0 && json) {
     try {
