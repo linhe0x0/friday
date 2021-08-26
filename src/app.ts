@@ -24,10 +24,10 @@ import useLogger from './utilities/logger'
 
 const logger = useLogger('friday')
 
-const isDebug = isDebugMode()
+const debug = isDebugMode()
 const initialStart = isInitialStart()
 
-if (isDebug && initialStart) {
+if (debug && initialStart) {
   if (!_.includes(['production', 'testing', 'test'], process.env.NODE_ENV)) {
     logger.warn(
       `Running in "${
@@ -91,7 +91,7 @@ addMiddleware(bodyParserMiddleware, 10)
 addMiddleware(requestIDMiddleware, 10)
 addMiddleware(loggerMiddleware, 10)
 
-if (!isDebugMode) {
+if (!debug) {
   addMiddleware(accessMiddleware, 10)
 }
 
@@ -120,7 +120,7 @@ addMiddleware(staticMiddleware, 10)
  */
 const corsConfig = getOptionalConfig('cors')
 
-if (isDebug || corsConfig) {
+if (debug || corsConfig) {
   const corsMiddleware = cors(corsConfig)
 
   addMiddleware(corsMiddleware, 10)
@@ -143,7 +143,7 @@ allMiddlewareList.forEach((item) => {
  * Register routes.
  */
 router.mount(app, {
-  debug: isDebug && initialStart,
+  debug: debug && initialStart,
 })
 
 /**
