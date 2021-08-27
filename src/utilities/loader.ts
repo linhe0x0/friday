@@ -9,7 +9,10 @@ export default function loader(filepath: string): any {
     const isJS = ext === '.js'
 
     if (isJS && !mod.default) {
-      mod.default = mod
+      Object.defineProperty(mod, 'default', {
+        value: mod,
+        writable: false,
+      })
     }
 
     return mod
