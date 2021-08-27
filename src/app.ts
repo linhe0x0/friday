@@ -14,7 +14,7 @@ import loggerMiddleware from './middleware/logger'
 import requestIDMiddleware from './middleware/request-id'
 import * as router from './router'
 import { getOptionalConfig } from './services/config'
-import { addHook, emitHook } from './services/hooks'
+import { emitHook } from './services/hooks'
 import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
 import { validateConfig } from './utilities/config-schema'
@@ -169,32 +169,28 @@ app.on('error', (err, ctx) => {
 /**
  * Handle process signals.
  */
-// Handle warnings
-process.on('warning', (warning) => {
-  logger.warn(warning)
-})
+if (initialStart) {
+  // Handle warnings
+  process.on('warning', (warning) => {
+    logger.warn(warning)
+  })
 
-// Handle uncaught promises
-process.on('unhandledRejection', (err) => {
-  if (err instanceof Error) {
-    logger.withError(err).error(`Unhandled Rejection: ${err.message}`)
-  } else {
-    logger.error('Unhandled Rejection: %s', err)
-  }
-})
+  // Handle uncaught promises
+  process.on('unhandledRejection', (err) => {
+    if (err instanceof Error) {
+      logger.withError(err).error(`Unhandled Rejection: ${err.message}`)
+    } else {
+      logger.error('Unhandled Rejection: %s', err)
+    }
+  })
 
-// Handle uncaught exceptions
-// Logger error and exit the process, does not exit gracefully.
-process.once('uncaughtException', (err) => {
-  logger.fatal(err)
-  process.exit(1)
-})
-
-// Remove all listenters of process before restarting the app.
-// Because the listeners will register again after the app starts.
-addHook('beforeRestart', () => {
-  process.removeAllListeners()
-})
+  // Handle uncaught exceptions
+  // Logger error and exit the process, does not exit gracefully.
+  process.once('uncaughtException', (err) => {
+    logger.fatal(err)
+    process.exit(1)
+  })
+}
 
 emitHook('onInit', app)
 
