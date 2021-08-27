@@ -14,7 +14,7 @@ import loggerMiddleware from './middleware/logger'
 import requestIDMiddleware from './middleware/request-id'
 import * as router from './router'
 import { getOptionalConfig } from './services/config'
-import { emitHook } from './services/hooks'
+import { addHook, emitHook } from './services/hooks'
 import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
 import { validateConfig } from './utilities/config-schema'
@@ -188,6 +188,12 @@ process.on('unhandledRejection', (err) => {
 process.once('uncaughtException', (err) => {
   logger.fatal(err)
   process.exit(1)
+})
+
+// Remove all listenters of process before restarting the app.
+// Because the listeners will register again after the app starts.
+addHook('beforeRestart', () => {
+  process.removeAllListeners()
 })
 
 emitHook('onInit', app)
