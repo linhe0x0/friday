@@ -11,16 +11,22 @@ interface StartCommandOptions {
   host?: string
   port?: number
   listen?: string
+  env?: string
 }
 
 export default function start(argv: Arguments<StartCommandOptions>): void {
-  const { host, port, listen } = argv
+  const { host, port, listen, env } = argv
   const defaultHost = '0.0.0.0'
   const defaultPort = parseInt(process.env.PORT || '3000', 10) || 3000
 
   process.env.FRIDAY_ENV = 'production'
+  process.env.APP_ENV = env || 'production'
 
-  if (_.isNil(process.env.NODE_ENV)) {
+  if (!process.env.NODE_CONFIG_ENV) {
+    process.env.NODE_CONFIG_ENV = process.env.APP_ENV
+  }
+
+  if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production'
   }
 

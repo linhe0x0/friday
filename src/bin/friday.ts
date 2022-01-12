@@ -32,6 +32,11 @@ yargs
         describe: 'path to a UNIX socket',
         type: 'string',
       },
+      env: {
+        alias: 'e',
+        describe: 'specify an environment of application and config files',
+        type: 'string',
+      },
     },
     start
   )

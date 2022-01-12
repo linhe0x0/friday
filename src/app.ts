@@ -47,6 +47,13 @@ if (debug && initialStart) {
 let app = new Koa()
 
 /**
+ * Defaulting app.env to the APP_ENV or NODE_ENV or "development".
+ *
+ * APP_ENV can be set with `--env`.
+ */
+app.env = process.env.APP_ENV || process.env.NODE_ENV || 'development'
+
+/**
  * Extends properties or methods to ctx to be used across the entire app
  */
 app.context.validate = validate
