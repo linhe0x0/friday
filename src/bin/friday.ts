@@ -27,11 +27,6 @@ yargs
         describe: 'specify a URI endpoint on which to listen',
         type: 'string',
       },
-      'unix-socket': {
-        alias: 'n',
-        describe: 'path to a UNIX socket',
-        type: 'string',
-      },
       env: {
         alias: 'e',
         describe: 'specify an environment of application and config files',
@@ -52,6 +47,6 @@ yargs
 
   For UNIX domain socket endpoint:
 
-    $ friday -n unix:/path/to/socket.sock
+    $ friday -l unix:/path/to/socket.sock
 `
   ).argv
