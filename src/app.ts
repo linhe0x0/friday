@@ -7,6 +7,7 @@ import path from 'path'
 
 import cors from '@koa/cors'
 
+import { getEntrySetupFun } from './lib/entry'
 import accessMiddleware from './middleware/access'
 import debugMiddleware from './middleware/debug'
 import errorHandlerMiddleware from './middleware/error-handler'
@@ -18,7 +19,6 @@ import { emitHook } from './services/hooks'
 import { addMiddleware, getMiddlewareList } from './services/middleware'
 import { validate } from './services/validator'
 import { validateConfig } from './utilities/config-schema'
-import { getEntrySetupFun } from './utilities/entry'
 import { isDebugMode, isInitialStart } from './utilities/env'
 import useLogger from './utilities/logger'
 

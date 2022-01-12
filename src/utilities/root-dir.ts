@@ -1,6 +1,6 @@
 import path from 'path'
 
-import { entry } from './entry'
+import { entry } from '../lib/entry'
 
 const p = path.parse(entry)
 

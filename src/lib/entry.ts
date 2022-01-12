@@ -3,8 +3,8 @@ import fs from 'fs'
 import Koa from 'koa'
 import path from 'path'
 
-import loader from './loader'
-import { pkgInfo } from './pkg'
+import loader from '../utilities/loader'
+import { pkgInfo } from '../utilities/pkg'
 
 let filepath = pkgInfo.main || 'app.js'
 
