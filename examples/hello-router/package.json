@@ -1,0 +1,12 @@
+{
+  "name": "hello-router",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "friday"
+  },
+  "keywords": [],
+  "author": "sqrtthree <imsqrtthree@gmail.com> (https://github.com/sqrthree)",
+  "license": "MIT"
+}
