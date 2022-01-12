@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { URL } from 'url'
 
-import { Endpoint, EndpointProtocol } from './serve'
+import type { Endpoint, EndpointProtocol } from './serve'
 
 export default function parseEndpoint(endpoint: string): Endpoint {
   const url = new URL(endpoint)
