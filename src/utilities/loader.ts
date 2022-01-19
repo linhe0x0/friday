@@ -16,7 +16,7 @@ export default function loader(filepath: string): any {
     }
 
     return mod
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(`Failed to import ${filepath}: ${err.stack}`)
   }
 }

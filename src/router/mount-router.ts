@@ -40,7 +40,7 @@ export default function mount(): RouteFn {
   if (routerPath) {
     try {
       userRouter = loader(routerPath).default
-    } catch (err) {
+    } catch (err: any) {
       logger.error(
         `Failed to load your routes from expect router file: [${routerPath}]: %s`,
         err.message

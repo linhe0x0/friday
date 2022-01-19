@@ -23,7 +23,7 @@ export default function access(
   if (contentLength > 0 && json) {
     try {
       body = JSON.stringify(ctx.request.body || {})
-    } catch (err) {
+    } catch (err: any) {
       ctx.logger
         .withError(err)
         .error(`JSON body could not be parsed: ${err.message} \n`)

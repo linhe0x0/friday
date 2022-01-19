@@ -18,7 +18,7 @@ export default async function errorHandlerMiddleware(
 ): Promise<void> {
   try {
     await next()
-  } catch (err) {
+  } catch (err: any) {
     ctx.status = err.status || err.statusCode || 500
 
     const message = err.message || http.STATUS_CODES[ctx.status]

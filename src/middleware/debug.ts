@@ -23,7 +23,7 @@ const logRequest = (ctx: Koa.Context): void => {
   if (contentLength > 0 && contentType.indexOf('application/json') === 0) {
     try {
       consola.log(ctx.request.body)
-    } catch (err) {
+    } catch (err: any) {
       consola.error(`JSON body could not be parsed: ${err.message} \n`)
     }
   }
@@ -108,7 +108,7 @@ export default async function debugMiddleware(
 
   try {
     await next()
-  } catch (err) {
+  } catch (err: any) {
     logError(err)
 
     throw err

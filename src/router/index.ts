@@ -37,7 +37,7 @@ export function mount(app: Koa, options?: Partial<MountOptions>) {
     if (router.stack.length === 0) {
       logger.warn('Routes are missing.')
     }
-  } catch (err) {
+  } catch (err: any) {
     logger.error(err.message)
     process.exit(1)
   }

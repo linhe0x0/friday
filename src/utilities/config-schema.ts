@@ -39,7 +39,7 @@ export function validateConfig(): void {
   _.forEach(schemas, (schema) => {
     try {
       validate(schema, configurations)
-    } catch (err) {
+    } catch (err: any) {
       logger.error(`Invalid configurations from ${configDir}:`)
 
       _.forEach(err.errors, (item) => {

@@ -189,7 +189,7 @@ ${conflictMessage}
 
             try {
               validate(s, d)
-            } catch (err) {
+            } catch (err: any) {
               ctx.throw(400, err)
             }
           }

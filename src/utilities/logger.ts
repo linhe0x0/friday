@@ -4,6 +4,7 @@ import os from 'os'
 import pino, { BaseLogger, LoggerOptions } from 'pino'
 import pinoPretty from 'pino-pretty'
 
+import { normalizeError } from '../lib/normalize-error'
 import { isDebugMode } from './env'
 
 type MixinFn = () => any
@@ -172,8 +173,10 @@ class Logger implements BaseLogger {
     return this
   }
 
-  withError(err: Error) {
-    this.err = err
+  withError(err: unknown) {
+    const error = normalizeError(err)
+
+    this.err = error
 
     return this
   }
