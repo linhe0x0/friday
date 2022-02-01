@@ -73,7 +73,7 @@
   "devDependencies": {
     "@sqrtthree/eslint-config-ts": "~0.2.0",
     "@sqrtthree/prettier-config": "^2.0.1",
-    "@sqrtthree/tsconfig": "~1.0.0",
+    "@sqrtthree/tsconfig": "~2.0.0",
     "@types/jest": "~27.4.0",
     "@types/lodash": "~4.14.178",
     "eslint": "~7.32.0",
