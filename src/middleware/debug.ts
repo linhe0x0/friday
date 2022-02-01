@@ -1,8 +1,8 @@
 import chalk from 'chalk'
 import consola from 'consola'
-import Koa from 'koa'
 import _ from 'lodash'
 import PrettyError from 'pretty-error'
+import type Koa from 'koa'
 
 import { isStaticFile } from '../utilities/fs'
 

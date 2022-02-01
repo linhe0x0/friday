@@ -4,7 +4,6 @@ import _ from 'lodash'
 
 export interface ValidationSchema {
   required?: string[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: Record<string, any>
 }
 
@@ -16,9 +15,7 @@ interface TypeValidateError extends Error {
 
 export function validate(
   schema: ValidationSchema,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: Record<string, any>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ...payload: Record<string, any>[]
 ): void {
   const ajv = new Ajv({

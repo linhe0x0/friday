@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Arguments } from 'yargs'
+import type { Arguments } from 'yargs'
 
 import logger from '../lib/command-logger'
 import isValidPort from '../lib/is-valid-port'
@@ -8,10 +8,10 @@ import { gracefulShutdown } from '../lib/process'
 import serve, { Endpoint } from '../lib/serve'
 
 interface StartCommandOptions {
-  host?: string
-  port?: number
-  listen?: string
-  env?: string
+  host?: string | undefined
+  port?: number | undefined
+  listen?: string | undefined
+  env?: string | undefined
 }
 
 export default function start(argv: Arguments<StartCommandOptions>): void {
@@ -47,7 +47,7 @@ export default function start(argv: Arguments<StartCommandOptions>): void {
   let endpoint: Endpoint = {
     protocol: 'http:',
     host: host || defaultHost,
-    port,
+    port: port || defaultPort,
   }
 
   if (listen) {

@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import type Koa from 'koa'
 
 interface MiddlewareItem {
   mid: Koa.Middleware

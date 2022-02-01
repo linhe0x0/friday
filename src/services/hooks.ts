@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import type Koa from 'koa'
 import _ from 'lodash'
 
 type HookType =
@@ -21,7 +21,7 @@ export function addHook(type: HookType, handler: HookHandler): void {
     hooks[type] = []
   }
 
-  hooks[type].push(handler)
+  hooks[type]!.push(handler)
 }
 
 export function emitHook(type: HookType, app: Koa): Promise<void | void[]> {

@@ -81,7 +81,6 @@ addMiddleware(errorHandlerMiddleware, 100)
 /**
  * Help secure the app with various HTTP headers by helmet.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const helmetOptions = getOptionalConfig<any>('helmet')
 const helmetMiddleware = helmet(helmetOptions)
 
@@ -106,7 +105,7 @@ if (!debug) {
  * Use static middleware.
  */
 const staticConfig = getOptionalConfig<Record<string, string>>('static')
-let staticRootDirectory = ''
+let staticRootDirectory: string | undefined = ''
 
 if (staticConfig) {
   staticRootDirectory =

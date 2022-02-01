@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import type Koa from 'koa'
 import _ from 'lodash'
 
 import Router from '@koa/router'
@@ -15,7 +15,6 @@ interface MountOptions {
   debug: boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function mount(app: Koa, options?: Partial<MountOptions>) {
   const opts = _.defaults(options, {
     debug: false,

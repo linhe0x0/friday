@@ -15,7 +15,7 @@ test('add middleware', () => {
   addMiddleware(jest.fn)
 
   expect(getMiddlewareList().length).toBe(1)
-  expect(getMiddlewareList()[0].weight).toBe(1)
+  expect(getMiddlewareList()[0]!.weight).toBe(1)
 })
 
 test('add middleware with weight', () => {
@@ -24,7 +24,7 @@ test('add middleware with weight', () => {
   addMiddleware(jest.fn, 2)
 
   expect(getMiddlewareList().length).toBe(1)
-  expect(getMiddlewareList()[0].weight).toBe(2)
+  expect(getMiddlewareList()[0]!.weight).toBe(2)
 })
 
 test('add middleware and sort', () => {
@@ -34,8 +34,8 @@ test('add middleware and sort', () => {
   addMiddleware(jest.fn, 10)
 
   expect(getMiddlewareList().length).toBe(2)
-  expect(getMiddlewareList()[0].weight).toBe(10)
-  expect(getMiddlewareList()[1].weight).toBe(2)
+  expect(getMiddlewareList()[0]!.weight).toBe(10)
+  expect(getMiddlewareList()[1]!.weight).toBe(2)
 })
 
 test('add middleware with use alias', () => {
@@ -44,5 +44,5 @@ test('add middleware with use alias', () => {
   use(jest.fn)
 
   expect(getMiddlewareList().length).toBe(1)
-  expect(getMiddlewareList()[0].weight).toBe(1)
+  expect(getMiddlewareList()[0]!.weight).toBe(1)
 })

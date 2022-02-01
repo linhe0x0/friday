@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import type Koa from 'koa'
 import prettyMilliseconds from 'pretty-ms'
 
 import { getConfigWithDefault } from '../services/config'
@@ -21,7 +21,6 @@ const pong = function pong(ctx: Koa.Context): void {
   ctx.body = 'pong'
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
 export default function helpfulRouter(router: any): void {
   router.get('/_info', info)
   router.get('/_ping', pong)

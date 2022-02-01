@@ -7,7 +7,6 @@ import useLogger from '../utilities/logger'
 import { rootDir } from '../utilities/root-dir'
 
 interface RouteFn {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (router: any): any
 }
 

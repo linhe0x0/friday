@@ -10,7 +10,6 @@ interface RichErrorOptions {
   message: string
   statusCode?: number
   error?: Error
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 }
 
@@ -21,7 +20,6 @@ class RichError extends Error {
 
   error?: Error
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 
   constructor(name: string, message: string) {
@@ -36,7 +34,6 @@ class RichError extends Error {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   with(context: Record<string, any>): RichError {
     this.context = context
 
@@ -46,7 +43,6 @@ class RichError extends Error {
   /**
    * Alias for with.
    */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   withContext(context: Record<string, any>): RichError {
     this.context = context
 
@@ -86,26 +82,21 @@ class RichError extends Error {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createError(
   message: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): RichError
 export function createError(
   name: string,
   message: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): RichError
 export function createError(
   statusCode: number,
   message: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): RichError
 export function createError(options: RichErrorOptions): RichError
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function createError(...args: any[]): RichError {
   const defaultErrorName = 'unknown'
   const opts: RichErrorOptions = {
@@ -147,28 +138,22 @@ export function createError(...args: any[]): RichError {
   return err
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function throwError(
   message: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): never
 export function throwError(
   name: string,
   message: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): never
 export function throwError(
   statusCode: number,
   message: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: Record<string, any>
 ): never
 export function throwError(options: RichErrorOptions): never
-// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
 export function throwError(...args: any): never {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const err = createError(args[0], args[1], args[2])
 
   throw err

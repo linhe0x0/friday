@@ -4,7 +4,6 @@ import useLogger from '../utilities/logger'
 
 const logger = useLogger('friday:router')
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any,@typescript-eslint/explicit-module-boundary-types
 export default function outputRoutes(router: any): void {
   logger.debug('Served routes:')
 

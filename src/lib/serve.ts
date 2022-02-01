@@ -5,7 +5,7 @@ export type EndpointProtocol = 'tcp:' | 'http:' | 'unix:'
 export interface Endpoint {
   protocol: EndpointProtocol
   host: string
-  port?: number
+  port?: number | undefined
 }
 
 export default async function serve(endpoint: Endpoint): Promise<http.Server> {

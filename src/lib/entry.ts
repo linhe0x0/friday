@@ -1,7 +1,7 @@
 import consola from 'consola'
 import fs from 'fs'
-import Koa from 'koa'
 import path from 'path'
+import type Koa from 'koa'
 
 import loader from '../utilities/loader'
 import { pkgInfo } from '../utilities/pkg'

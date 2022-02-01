@@ -1,8 +1,8 @@
 import glob from 'glob'
-import Koa from 'koa'
 import _ from 'lodash'
 import path from 'path'
 import { isURL } from 'validator'
+import type Koa from 'koa'
 
 import { validate } from '../services/validator'
 import loader from '../utilities/loader'
@@ -49,7 +49,7 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
       const routesInFilePath: string[] = _.tail(paths)
       const values = _.split(_.last(routesInFilePath), '.')
       const filename = _.first(values)
-      const method = values.length === 2 ? 'all' : values[1]
+      const method = values.length === 2 ? 'all' : values[1] || 'all'
 
       if (!filename) {
         return undefined
@@ -95,8 +95,8 @@ export default function mountApi(): Function {
     _.map(routeUrlList, (item, index) => {
       const results: fileRouteMetadata[] = []
 
-      for (let i = index + 1; i < routeUrlList.length; i += 1) {
-        const target = routeUrlList[i]
+      for (let i = index + 1, len = routeUrlList.length; i < len; i += 1) {
+        const target = routeUrlList[i] as fileRouteMetadata
 
         if (item.method === target.method && item.url === target.url) {
           if (!results.length) {

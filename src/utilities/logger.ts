@@ -12,7 +12,7 @@ type MixinFn = () => any
 export function loggerGenerator(
   name: string,
   labels?: Record<string, string | number>,
-  mixin?: MixinFn
+  mixinFn?: MixinFn
 ): pino.Logger {
   const isDebug = isDebugMode()
 
@@ -35,6 +35,12 @@ export function loggerGenerator(
     pid: process.pid,
   }
   const baseLabels = _.assign(defaultBaseLabels, labels)
+
+  let mixin: MixinFn | undefined = mixinFn
+
+  if (!mixin) {
+    mixin = () => ({})
+  }
 
   const options: LoggerOptions = {
     name,
@@ -64,14 +70,11 @@ export function loggerGenerator(
   return logger
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type loggerContext = Record<string | number, any>
 
 interface LoggingMethodOptions {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mergingObject: Record<string, any>
   message: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   interpolationValues: any[]
 }
 
@@ -80,9 +83,9 @@ class Logger implements BaseLogger {
 
   private logger: pino.Logger
 
-  private context?: loggerContext = undefined
+  private context?: loggerContext | undefined = undefined
 
-  private err?: Error = undefined
+  private err?: Error | undefined = undefined
 
   constructor(
     name: string,
@@ -98,7 +101,6 @@ class Logger implements BaseLogger {
     method: string,
     mergingObject?: T,
     message?: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...interpolationValues: any[]
   ) {
     const options: LoggingMethodOptions = {
@@ -143,27 +145,27 @@ class Logger implements BaseLogger {
    */
   silent: pino.LogFn = () => undefined
 
-  trace: pino.LogFn = <T>(...args) => {
+  trace: pino.LogFn = <T>(...args: any[]) => {
     this.caller<T>('trace', ...args)
   }
 
-  debug: pino.LogFn = <T>(...args) => {
+  debug: pino.LogFn = <T>(...args: any[]) => {
     this.caller<T>('debug', ...args)
   }
 
-  info: pino.LogFn = <T>(...args) => {
+  info: pino.LogFn = <T>(...args: any[]) => {
     this.caller<T>('info', ...args)
   }
 
-  warn: pino.LogFn = <T>(...args) => {
+  warn: pino.LogFn = <T>(...args: any[]) => {
     this.caller<T>('warn', ...args)
   }
 
-  error: pino.LogFn = <T>(...args) => {
+  error: pino.LogFn = <T>(...args: any[]) => {
     this.caller<T>('error', ...args)
   }
 
-  fatal: pino.LogFn = <T>(...args) => {
+  fatal: pino.LogFn = <T>(...args: any[]) => {
     this.caller<T>('fatal', ...args)
   }
 

@@ -1,4 +1,4 @@
-import Koa from 'koa'
+import type Koa from 'koa'
 import { v3 as uuidv3, v4 as uuidv4 } from 'uuid'
 
 export default function requestIDMiddleware(
