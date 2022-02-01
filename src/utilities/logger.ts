@@ -143,6 +143,7 @@ class Logger implements BaseLogger {
   /**
    * Noop function.
    */
+  // eslint-disable-next-line class-methods-use-this
   silent: pino.LogFn = () => undefined
 
   trace: pino.LogFn = <T>(...args: any[]) => {
