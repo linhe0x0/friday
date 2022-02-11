@@ -19,7 +19,7 @@ interface fileRouteMetadata {
 
 const apiPrefix = '/api'
 
-const ignoredFile = (filename: string): boolean => {
+export function ignoredFile(filename: string): boolean {
   if (_.startsWith(filename, '.')) {
     return true
   }
