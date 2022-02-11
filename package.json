@@ -16,8 +16,8 @@
     "lint": "npm run type-check && eslint --ext ts ./src",
     "lint-with-fix": "eslint --ext ts --fix ./src",
     "type-check": "tsc --noEmit",
-    "test": "jest -o ./dist",
-    "test:cov": "jest --coverage ./dist",
+    "test": "SUPPRESS_NO_CONFIG_WARNING=y jest -o ./dist",
+    "test:cov": "SUPPRESS_NO_CONFIG_WARNING=y jest --coverage ./dist",
     "prepublishOnly": "npm run build",
     "prepare": "husky install"
   },
