@@ -39,12 +39,10 @@ export function ignoredFile(filename: string): boolean {
   return false
 }
 
-export function fileRoutes(dir: string): fileRouteMetadata[] {
-  const files = glob.sync(`${dir}/*/api/**/*.js`)
-
-  return _.filter(
-    _.map(files, (item): fileRouteMetadata | undefined => {
-      const filePath = item.substring(dir.length + 1)
+export function fileRoutes(files: string[]): fileRouteMetadata[] {
+  const routes: (fileRouteMetadata | undefined)[] = _.map(
+    files,
+    (filePath): fileRouteMetadata | undefined => {
       const [scope, ...paths] = filePath.split('/')
       const routesInFilePath: string[] = _.tail(paths)
       const values = _.split(_.last(routesInFilePath), '.')
@@ -81,14 +79,30 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
         method,
         url,
       }
-    }),
+    }
+  )
+  const availableRoutes: fileRouteMetadata[] = _.filter(
+    routes,
     (item) => !!item
   ) as fileRouteMetadata[]
+
+  return availableRoutes
+}
+
+export function getRouteFiles(): string[] {
+  const files = glob.sync(`${appDir}/*/api/**/*.js`)
+
+  const results = files.map((item: string) => {
+    return item.substring(appDir.length + 1)
+  })
+
+  return results
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export default function mountApi(): Function {
-  const routeUrlList = fileRoutes(appDir)
+  const routeFiles = getRouteFiles()
+  const routeUrlList = fileRoutes(routeFiles)
 
   const conflicts = _.filter(
     _.map(routeUrlList, (item, index) => {
