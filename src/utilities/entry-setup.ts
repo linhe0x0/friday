@@ -7,26 +7,26 @@ import { entry } from '../lib/app-info'
 type entrySetupFun = (app: Koa) => Koa
 
 export function getEntrySetupFun(): entrySetupFun {
-  let fun: unknown
+  let fn: unknown
 
   try {
-    fun = loader(entry).default
+    fn = loader(entry).default
   } catch (err) {
     consola.error(err)
     process.exit(1)
   }
 
-  if (typeof fun !== 'function') {
+  if (typeof fn !== 'function') {
     consola.error(`The file "${entry}" does not export a default function.`)
     process.exit(1)
   }
 
-  const isAsyncFunction = fun.constructor.name === 'AsyncFunction'
+  const isAsyncFunction = fn.constructor.name === 'AsyncFunction'
 
   if (isAsyncFunction) {
     consola.error('setup function must not be async function.')
     process.exit(1)
   }
 
-  return fun as entrySetupFun
+  return fn as entrySetupFun
 }
