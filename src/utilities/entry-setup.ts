@@ -1,23 +1,8 @@
 import consola from 'consola'
-import fs from 'fs'
-import path from 'path'
 import type Koa from 'koa'
 
-import loader from '../utilities/loader'
-import { pkgInfo } from '../utilities/pkg'
-
-let filepath = pkgInfo.main || 'app.js'
-
-if (filepath[0] !== '/') {
-  filepath = path.resolve(process.cwd(), filepath)
-}
-
-if (!fs.existsSync(filepath)) {
-  console.error(`The file or directory "${filepath}" doesn't exist.`)
-  process.exit(1)
-}
-
-export const entry = filepath
+import loader from './loader'
+import { entry } from '../lib/app-info'
 
 type entrySetupFun = (app: Koa) => Koa
 

@@ -7,7 +7,7 @@ import path from 'path'
 
 import cors from '@koa/cors'
 
-import { getEntrySetupFun } from './lib/entry'
+import { getEntrySetupFun } from './utilities/entry-setup'
 import accessMiddleware from './middleware/access'
 import debugMiddleware from './middleware/debug'
 import errorHandlerMiddleware from './middleware/error-handler'

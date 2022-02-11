@@ -7,7 +7,7 @@ import type Koa from 'koa'
 import { validate } from '../services/validator'
 import loader from '../utilities/loader'
 import useLogger from '../utilities/logger'
-import { rootDir } from '../utilities/root-dir'
+import { appDir } from '../lib/app-info'
 
 const logger = useLogger('friday:router')
 
@@ -88,8 +88,7 @@ export function fileRoutes(dir: string): fileRouteMetadata[] {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export default function mountApi(): Function {
-  const apiDir = path.resolve(rootDir, 'app')
-  const routeUrlList = fileRoutes(apiDir)
+  const routeUrlList = fileRoutes(appDir)
 
   const conflicts = _.filter(
     _.map(routeUrlList, (item, index) => {
@@ -133,7 +132,7 @@ ${conflictMessage}
   }
 
   const routes = _.map(routeUrlList, (item) => {
-    const filePath = path.resolve(apiDir, item.file)
+    const filePath = path.resolve(appDir, item.file)
     const route = loader(filePath)
     const { schema, middleware } = route
     const handler = route.handler || route.default

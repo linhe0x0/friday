@@ -4,7 +4,7 @@ import path from 'path'
 
 import loader from '../utilities/loader'
 import useLogger from '../utilities/logger'
-import { rootDir } from '../utilities/root-dir'
+import { rootDir } from '../lib/app-info'
 
 interface RouteFn {
   (router: any): any
