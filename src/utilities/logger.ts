@@ -1,10 +1,10 @@
-import config from 'config'
 import _ from 'lodash'
 import os from 'os'
 import pino, { BaseLogger, LoggerOptions } from 'pino'
 import pinoPretty from 'pino-pretty'
 
 import { normalizeError } from '../lib/normalize-error'
+import { hasConfig, getConfig } from '../services/config'
 import { isDebugMode } from './env'
 
 type MixinFn = () => any
@@ -18,8 +18,8 @@ export function loggerGenerator(
 
   let logLevel: pino.LevelWithSilent = isDebug ? 'trace' : 'info'
 
-  if (config.has('logger.level')) {
-    logLevel = config.get('logger.level')
+  if (hasConfig('logger.level')) {
+    logLevel = getConfig('logger.level')
   }
 
   if (process.env.LOGGER_LEVEL) {
