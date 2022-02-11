@@ -99,17 +99,15 @@ export function getRouteFiles(): string[] {
   return results
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export default function mountApi(): Function {
-  const routeFiles = getRouteFiles()
-  const routeUrlList = fileRoutes(routeFiles)
-
+export function getConflictingFileRoutes(
+  routes: fileRouteMetadata[]
+): fileRouteMetadata[][] {
   const conflicts = _.filter(
-    _.map(routeUrlList, (item, index) => {
+    _.map(routes, (item, index) => {
       const results: fileRouteMetadata[] = []
 
-      for (let i = index + 1, len = routeUrlList.length; i < len; i += 1) {
-        const target = routeUrlList[i] as fileRouteMetadata
+      for (let i = index + 1, len = routes.length; i < len; i += 1) {
+        const target = routes[i] as fileRouteMetadata
 
         if (item.method === target.method && item.url === target.url) {
           if (!results.length) {
@@ -124,6 +122,15 @@ export default function mountApi(): Function {
     }),
     (item) => item.length > 0
   )
+
+  return conflicts
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export default function mountApi(): Function {
+  const routeFiles = getRouteFiles()
+  const routeUrlList = fileRoutes(routeFiles)
+  const conflicts = getConflictingFileRoutes(routeUrlList)
 
   if (conflicts.length) {
     let conflictMessage = ''

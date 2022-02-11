@@ -1,4 +1,4 @@
-import { ignoredFile, fileRoutes } from './mount-api'
+import { ignoredFile, fileRoutes, getConflictingFileRoutes } from './mount-api'
 
 describe('ignoreFile', () => {
   test('should ignore the file which starts with .', () => {
@@ -89,6 +89,20 @@ describe('fileRoutes', () => {
         url: '/api/users',
       },
     ]
+
+    expect(fileRoutes(files)).toEqual(routes)
+  })
+
+  test('should return empty routes with invalid filenames', () => {
+    const files = ['users/api/.js']
+    const routes = []
+
+    expect(fileRoutes(files)).toEqual(routes)
+  })
+
+  test('should return empty routes with ignored filenames', () => {
+    const files = ['users/api/_index.get.js']
+    const routes = []
 
     expect(fileRoutes(files)).toEqual(routes)
   })
@@ -212,5 +226,60 @@ describe('fileRoutes', () => {
     ]
 
     expect(fileRoutes(files)).toEqual(routes)
+  })
+})
+
+describe('getConflictingFileRoutes', () => {
+  test('should return empty routes when there are no conflicting.', () => {
+    const routes = [
+      {
+        file: 'users/api/index.get.js',
+        method: 'get',
+        url: '/api/users',
+      },
+      {
+        file: 'users/api/index.post.js',
+        method: 'post',
+        url: '/api/users',
+      },
+    ]
+
+    expect(getConflictingFileRoutes(routes)).toEqual([])
+  })
+
+  test('should return conflicting routes when with conflict.', () => {
+    const routes = [
+      {
+        file: 'users/api/index.get.js',
+        method: 'get',
+        url: '/api/users',
+      },
+      {
+        file: 'users/api/[id]/index.get.js',
+        method: 'get',
+        url: '/api/users/[id]',
+      },
+      {
+        file: 'users/api/[id].get.js',
+        method: 'get',
+        url: '/api/users/[id]',
+      },
+    ]
+    const conflicting = [
+      [
+        {
+          file: 'users/api/[id]/index.get.js',
+          method: 'get',
+          url: '/api/users/[id]',
+        },
+        {
+          file: 'users/api/[id].get.js',
+          method: 'get',
+          url: '/api/users/[id]',
+        },
+      ],
+    ]
+
+    expect(getConflictingFileRoutes(routes)).toEqual(conflicting)
   })
 })
