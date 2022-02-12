@@ -89,11 +89,11 @@ export function fileRoutes(files: string[]): fileRouteMetadata[] {
   return availableRoutes
 }
 
-export function getRouteFiles(): string[] {
-  const files = glob.sync(`${appDir}/*/api/**/*.js`)
+export function getRouteFiles(dir: string): string[] {
+  const files = glob.sync(`${dir}/*/api/**/*.js`)
 
   const results = files.map((item: string) => {
-    return item.substring(appDir.length + 1)
+    return item.substring(dir.length + 1)
   })
 
   return results
@@ -128,7 +128,7 @@ export function getConflictingFileRoutes(
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export default function mountApi(): Function {
-  const routeFiles = getRouteFiles()
+  const routeFiles = getRouteFiles(appDir)
   const routeUrlList = fileRoutes(routeFiles)
   const conflicts = getConflictingFileRoutes(routeUrlList)
 

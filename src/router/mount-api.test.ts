@@ -1,4 +1,11 @@
-import { ignoredFile, fileRoutes, getConflictingFileRoutes } from './mount-api'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import mock from 'mock-fs'
+import {
+  ignoredFile,
+  fileRoutes,
+  getConflictingFileRoutes,
+  getRouteFiles,
+} from './mount-api'
 
 describe('ignoreFile', () => {
   test('should ignore the file which starts with .', () => {
@@ -281,5 +288,33 @@ describe('getConflictingFileRoutes', () => {
     ]
 
     expect(getConflictingFileRoutes(routes)).toEqual(conflicting)
+  })
+})
+
+describe('getRouteFiles', () => {
+  test('should return all matched route files', () => {
+    mock({
+      'dist/app/users/api': {
+        'index.get.js': '',
+        'index.post.js': '',
+        '[id].get.js': '',
+        '[id].put.js': '',
+      },
+      'dist/app/articles/api/[id].get.js': '',
+    })
+
+    const cwd = process.cwd()
+    const dir = `${cwd}/dist/app`
+    const files = getRouteFiles(dir)
+
+    expect(files).toEqual([
+      'articles/api/[id].get.js',
+      'users/api/[id].get.js',
+      'users/api/[id].put.js',
+      'users/api/index.get.js',
+      'users/api/index.post.js',
+    ])
+
+    mock.restore()
   })
 })
