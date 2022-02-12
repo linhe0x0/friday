@@ -422,12 +422,8 @@ describe('mountApi', () => {
 
   test('should throw an error when mounting conflict routes', () => {
     mock({
-      'dist/app/mount-conflict/api': {
-        '[id].get.js': '',
-      },
-      'dist/app/mount-conflict/api/[id]': {
-        'index.get.js': '',
-      },
+      'dist/app/mount-conflict/api/[id].get.js': '',
+      'dist/app/mount-conflict/api/[id]/index.get.js': '',
     })
 
     expect(() => {
