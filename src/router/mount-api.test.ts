@@ -1,11 +1,15 @@
+import Router from '@koa/router'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import mock from 'mock-fs'
-import {
+import mountApi, {
   ignoredFile,
   fileRoutes,
   getConflictingFileRoutes,
   getRouteFiles,
+  toRoutes,
 } from './mount-api'
+
+afterEach(mock.restore)
 
 describe('ignoreFile', () => {
   test('should ignore the file which starts with .', () => {
@@ -294,13 +298,13 @@ describe('getConflictingFileRoutes', () => {
 describe('getRouteFiles', () => {
   test('should return all matched route files', () => {
     mock({
-      'dist/app/users/api': {
+      'dist/app/all-matched/api': {
         'index.get.js': '',
         'index.post.js': '',
         '[id].get.js': '',
         '[id].put.js': '',
       },
-      'dist/app/articles/api/[id].get.js': '',
+      'dist/app/all-matched-2/api/[id].get.js': '',
     })
 
     const cwd = process.cwd()
@@ -308,13 +312,140 @@ describe('getRouteFiles', () => {
     const files = getRouteFiles(dir)
 
     expect(files).toEqual([
-      'articles/api/[id].get.js',
-      'users/api/[id].get.js',
-      'users/api/[id].put.js',
-      'users/api/index.get.js',
-      'users/api/index.post.js',
+      'all-matched-2/api/[id].get.js',
+      'all-matched/api/[id].get.js',
+      'all-matched/api/[id].put.js',
+      'all-matched/api/index.get.js',
+      'all-matched/api/index.post.js',
     ])
+  })
+})
 
-    mock.restore()
+describe('toRoutes', () => {
+  test('should return routes when converting valid routes', () => {
+    mock({
+      'dist/app/to-routes-valid/api/index.get.js':
+        'module.exports = function () {}',
+    })
+    const cwd = process.cwd()
+    const dir = `${cwd}/dist/app`
+
+    const routes = toRoutes(
+      [
+        {
+          file: 'to-routes-valid/api/index.get.js',
+          method: 'get',
+          url: '/api/to-routes-valid',
+        },
+      ],
+      dir
+    )
+
+    expect(routes[0]!.method).toBe('get')
+    expect(routes[0]!.url).toBe('/api/to-routes-valid')
+    expect(routes[0]!.schema).toEqual({})
+    expect(routes[0]!.middleware).toEqual([])
+  })
+
+  test('should return null when converting empty route', () => {
+    mock({
+      'dist/app/to-routes-empty/api/index.get.js': '{}',
+    })
+    const cwd = process.cwd()
+    const dir = `${cwd}/dist/app`
+
+    const routes = toRoutes(
+      [
+        {
+          file: 'to-routes-empty/api/index.get.js',
+          method: 'get',
+          url: '/api/to-routes-empty',
+        },
+      ],
+      dir
+    )
+
+    expect(routes[0]).toBeNull()
+  })
+
+  test('should throw an error when converting invalid route', () => {
+    mock({
+      'dist/app/to-routes-invalid/api/[to-routes-invalid].get.js':
+        'module.exports = { a: 1 }',
+    })
+
+    expect(() => {
+      const cwd = process.cwd()
+      const dir = `${cwd}/dist/app`
+
+      toRoutes(
+        [
+          {
+            file: 'to-routes-invalid/api/[to-routes-invalid].get.js',
+            method: 'get',
+            url: '/api/to-routes-invalid/[to-routes-invalid]',
+          },
+        ],
+        dir
+      )
+    }).toThrow('Failed to load your routes')
+  })
+})
+
+describe('mountApi', () => {
+  test('should mount routes when with valid data', () => {
+    mock({
+      'dist/app/mount-with-valid-route/api/index.get.js':
+        'module.exports = function () {}',
+    })
+
+    expect(() => {
+      const router = new Router()
+      const useApiRouter = mountApi()
+
+      useApiRouter(router)
+    }).not.toThrow()
+  })
+
+  test('should mount routes when with empty data', () => {
+    mock({
+      'dist/app/mount-with-empty-route/api/index.get.js': 'module.exports = {}',
+    })
+
+    expect(() => {
+      const router = new Router()
+      const useApiRouter = mountApi()
+
+      useApiRouter(router)
+    }).not.toThrow()
+  })
+
+  test('should throw an error when mounting conflict routes', () => {
+    mock({
+      'dist/app/mount-conflict/api': {
+        '[id].get.js': '',
+      },
+      'dist/app/mount-conflict/api/[id]': {
+        'index.get.js': '',
+      },
+    })
+
+    expect(() => {
+      mountApi()
+    }).toThrow('conflicts')
+  })
+
+  test('should throw an error when mounting unsupported routes', () => {
+    mock({
+      'dist/app/unsupported/api/index.unsupported.js':
+        'module.exports = function () {}',
+    })
+
+    expect(() => {
+      const router = new Router()
+      const useApiRouter = mountApi()
+
+      useApiRouter(router)
+    }).toThrow('Unsupported route method')
   })
 })

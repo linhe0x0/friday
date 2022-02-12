@@ -11,12 +11,6 @@ import { appDir } from '../lib/app-info'
 
 const logger = useLogger('friday:router')
 
-interface fileRouteMetadata {
-  file: string
-  method: string
-  url: string
-}
-
 const apiPrefix = '/api'
 
 export function ignoredFile(filename: string): boolean {
@@ -37,6 +31,12 @@ export function ignoredFile(filename: string): boolean {
   }
 
   return false
+}
+
+interface fileRouteMetadata {
+  file: string
+  method: string
+  url: string
 }
 
 export function fileRoutes(files: string[]): fileRouteMetadata[] {
@@ -126,34 +126,20 @@ export function getConflictingFileRoutes(
   return conflicts
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export default function mountApi(): Function {
-  const routeFiles = getRouteFiles(appDir)
-  const routeUrlList = fileRoutes(routeFiles)
-  const conflicts = getConflictingFileRoutes(routeUrlList)
+interface Route {
+  method: string
+  url: string
+  schema: any
+  middleware: any
+  handler: any
+}
 
-  if (conflicts.length) {
-    let conflictMessage = ''
-
-    _.forEach(conflicts, (item) => {
-      conflictMessage += '\n'
-
-      _.forEach(item, (route) => {
-        conflictMessage += `  ${route.url} <= ${route.file}\n`
-      })
-    })
-
-    const message = `There are some conflicts that need to be resolved manually.
-${conflictMessage}
-`
-
-    logger.error(message)
-
-    throw new Error(message)
-  }
-
-  const routes = _.map(routeUrlList, (item) => {
-    const filePath = path.resolve(appDir, item.file)
+export function toRoutes(
+  data: fileRouteMetadata[],
+  baseDir: string
+): (Route | null)[] {
+  return _.map(data, (item) => {
+    const filePath = path.resolve(baseDir, item.file)
     const route = loader(filePath)
     const { schema, middleware } = route
     const handler = route.handler || route.default
@@ -182,6 +168,35 @@ ${conflictMessage}
       handler,
     }
   })
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export default function mountApi(): Function {
+  const routeFiles = getRouteFiles(appDir)
+  const routeUrlList = fileRoutes(routeFiles)
+  const conflicts = getConflictingFileRoutes(routeUrlList)
+
+  if (conflicts.length) {
+    let conflictMessage = ''
+
+    _.forEach(conflicts, (item) => {
+      conflictMessage += '\n'
+
+      _.forEach(item, (route) => {
+        conflictMessage += `  ${route.url} <= ${route.file}\n`
+      })
+    })
+
+    const message = `There are some conflicts that need to be resolved manually.
+${conflictMessage}
+`
+
+    logger.error(message)
+
+    throw new Error(message)
+  }
+
+  const routes = toRoutes(routeUrlList, appDir)
 
   return function mount(router) {
     _.forEach(routes, (item) => {
