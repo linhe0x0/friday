@@ -9,6 +9,8 @@ import mountApi, {
   toRoutes,
 } from './mount-api'
 
+afterEach(mock.restore)
+
 describe('ignoreFile', () => {
   test('should ignore the file which starts with .', () => {
     expect(ignoredFile('.ignore.js')).toBe(true)
@@ -294,6 +296,8 @@ describe('getConflictingFileRoutes', () => {
 })
 
 describe('getRouteFiles', () => {
+  afterEach(mock.restore)
+
   test('should return all matched route files', () => {
     mock({
       'dist/app/all-matched/api': {
@@ -316,12 +320,12 @@ describe('getRouteFiles', () => {
       'all-matched/api/index.get.js',
       'all-matched/api/index.post.js',
     ])
-
-    mock.restore()
   })
 })
 
 describe('toRoutes', () => {
+  afterEach(mock.restore)
+
   test('should return routes when converting valid routes', () => {
     mock({
       'dist/app/to-routes-valid/api/index.get.js':
@@ -345,8 +349,6 @@ describe('toRoutes', () => {
     expect(routes[0]!.url).toBe('/api/to-routes-valid')
     expect(routes[0]!.schema).toEqual({})
     expect(routes[0]!.middleware).toEqual([])
-
-    mock.restore()
   })
 
   test('should return null when converting empty route', () => {
@@ -368,8 +370,6 @@ describe('toRoutes', () => {
     )
 
     expect(routes[0]).toBeNull()
-
-    mock.restore()
   })
 
   test('should throw an error when converting invalid route', () => {
@@ -393,12 +393,12 @@ describe('toRoutes', () => {
         dir
       )
     }).toThrow('Failed to load your routes')
-
-    mock.restore()
   })
 })
 
 describe('mountApi', () => {
+  afterEach(mock.restore)
+
   test('should mount routes when with valid data', () => {
     mock({
       'dist/app/mount-with-valid-route/api/index.get.js':
@@ -411,8 +411,6 @@ describe('mountApi', () => {
 
       useApiRouter(router)
     }).not.toThrow()
-
-    mock.restore()
   })
 
   test('should mount routes when with empty data', () => {
@@ -426,8 +424,6 @@ describe('mountApi', () => {
 
       useApiRouter(router)
     }).not.toThrow()
-
-    mock.restore()
   })
 
   test('should throw an error when mounting conflict routes', () => {
@@ -439,8 +435,6 @@ describe('mountApi', () => {
     expect(() => {
       mountApi()
     }).toThrow('conflicts')
-
-    mock.restore()
   })
 
   test('should throw an error when mounting unsupported routes', () => {
@@ -455,7 +449,5 @@ describe('mountApi', () => {
 
       useApiRouter(router)
     }).toThrow('Unsupported route method')
-
-    mock.restore()
   })
 })
