@@ -110,6 +110,8 @@ export function createError(...args: any[]): Errors {
       ;[opts.message] = args
     } else if (args.length === 2 && typeof args[1] !== 'string') {
       ;[opts.message, opts.context] = args
+    } else if (!args[1]) {
+      ;[opts.message, opts.context] = args
     } else {
       ;[opts.name, opts.message, opts.context] = args
     }
@@ -118,7 +120,7 @@ export function createError(...args: any[]): Errors {
   }
 
   if (!opts.message) {
-    throw new Error('Message is missed.')
+    throw new Error('message is required.')
   }
 
   const err = new Errors(opts.name || defaultErrorName, opts.message)
@@ -171,7 +173,7 @@ export function is(err: ErrorsLike, name: string): boolean {
   }
 
   if (err.error) {
-    return is(err.error, name)
+    return err.error.message === name
   }
 
   return false
