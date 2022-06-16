@@ -1,11 +1,11 @@
 import _ from 'lodash'
 
-interface RichErrorLike {
+interface ErrorsLike {
   name: string
   error?: Error
 }
 
-interface RichErrorOptions {
+interface ErrorsOptions {
   name?: string
   message: string
   statusCode?: number
@@ -13,7 +13,7 @@ interface RichErrorOptions {
   context?: Record<string, any>
 }
 
-class RichError extends Error {
+class Errors extends Error {
   status?: number
 
   statusCode?: number
@@ -26,7 +26,7 @@ class RichError extends Error {
     super(message)
 
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, RichError)
+      Error.captureStackTrace(this, Errors)
     }
 
     if (name) {
@@ -34,7 +34,7 @@ class RichError extends Error {
     }
   }
 
-  with(context: Record<string, any>): RichError {
+  with(context: Record<string, any>): Errors {
     this.context = context
 
     return this
@@ -43,19 +43,19 @@ class RichError extends Error {
   /**
    * Alias for with.
    */
-  withContext(context: Record<string, any>): RichError {
+  withContext(context: Record<string, any>): Errors {
     this.context = context
 
     return this
   }
 
-  withName(name: string): RichError {
+  withName(name: string): Errors {
     this.name = name
 
     return this
   }
 
-  withError(err: Error): RichError {
+  withError(err: Error): Errors {
     const endsWithColon = this.message.trimRight().endsWith(':')
 
     this.error = err
@@ -69,7 +69,7 @@ class RichError extends Error {
     return this
   }
 
-  withStatus(statusCode: number): RichError {
+  withStatus(statusCode: number): Errors {
     this.status = statusCode
     this.statusCode = statusCode
 
@@ -85,21 +85,21 @@ class RichError extends Error {
 export function createError(
   message: string,
   context?: Record<string, any>
-): RichError
+): Errors
 export function createError(
   name: string,
   message: string,
   context?: Record<string, any>
-): RichError
+): Errors
 export function createError(
   statusCode: number,
   message: string,
   context?: Record<string, any>
-): RichError
-export function createError(options: RichErrorOptions): RichError
-export function createError(...args: any[]): RichError {
+): Errors
+export function createError(options: ErrorsOptions): Errors
+export function createError(...args: any[]): Errors {
   const defaultErrorName = 'unknown'
-  const opts: RichErrorOptions = {
+  const opts: ErrorsOptions = {
     message: '',
   }
 
@@ -121,7 +121,7 @@ export function createError(...args: any[]): RichError {
     throw new Error('Message is missed.')
   }
 
-  const err = new RichError(opts.name || defaultErrorName, opts.message)
+  const err = new Errors(opts.name || defaultErrorName, opts.message)
 
   if (opts.statusCode) {
     err.withStatus(opts.statusCode)
@@ -152,18 +152,18 @@ export function throwError(
   message: string,
   context?: Record<string, any>
 ): never
-export function throwError(options: RichErrorOptions): never
+export function throwError(options: ErrorsOptions): never
 export function throwError(...args: any): never {
   const err = createError(args[0], args[1], args[2])
 
   throw err
 }
 
-export const newError = (name: string, message?: string): RichError => {
-  return new RichError(name, message || '')
+export function newError(name: string, message?: string): Errors {
+  return new Errors(name, message || '')
 }
 
-export const is = (err: RichErrorLike, name: string): boolean => {
+export function is(err: ErrorsLike, name: string): boolean {
   const isSameName = err.name === name
 
   if (isSameName) {
@@ -175,4 +175,8 @@ export const is = (err: RichErrorLike, name: string): boolean => {
   }
 
   return false
+}
+
+export function isErrors(err: unknown | any): err is Errors {
+  return err instanceof Errors
 }
