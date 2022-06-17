@@ -109,7 +109,7 @@ describe('newError', () => {
     })
   })
 
-  it('should create an error with the given name', () => {
+  it('should create an error with the name given by withName', () => {
     const err = newError('name')
 
     err.withName('new name')
