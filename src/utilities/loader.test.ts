@@ -9,7 +9,7 @@ test('load json file', () => {
 })
 
 test('load common js file', () => {
-  const js = loader(path.resolve(__dirname, './pkg.js'))
+  const js = loader(path.resolve(__dirname, '../../dist/utilities/pkg.js'))
 
   expect(typeof js).toBe('object')
   expect(js.default).toBeDefined()
@@ -18,7 +18,7 @@ test('load common js file', () => {
 })
 
 test('load ESModule js file', () => {
-  const js = loader(path.resolve(__dirname, './loader.js'))
+  const js = loader(path.resolve(__dirname, '../../dist/utilities/loader.js'))
 
   expect(js.default).toBeDefined()
   expect(typeof js.default).toBe('function')
