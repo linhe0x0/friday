@@ -16,8 +16,7 @@
     "lint": "npm run type-check && eslint --ext ts ./src",
     "lint-with-fix": "eslint --ext ts --fix ./src",
     "type-check": "tsc --noEmit",
-    "pretest": "tsc",
-    "test": "SUPPRESS_NO_CONFIG_WARNING=y jest -o ./src",
+    "test": "SUPPRESS_NO_CONFIG_WARNING=y jest ./src",
     "test:cov": "SUPPRESS_NO_CONFIG_WARNING=y jest --coverage ./src",
     "prepublishOnly": "npm run build",
     "prepare": "husky install"
@@ -72,6 +71,7 @@
     "yargs": "~17.5.1"
   },
   "devDependencies": {
+    "@babel/core": "~7.18.5",
     "@babel/preset-env": "~7.18.2",
     "@babel/preset-typescript": "~7.17.12",
     "@sqrtthree/eslint-config-ts": "~0.3.0",
@@ -79,6 +79,7 @@
     "@sqrtthree/tsconfig": "~2.0.0",
     "@types/jest": "~28.1.2",
     "@types/lodash": "~4.14.182",
+    "babel-jest": "~28.1.1",
     "eslint": "~8.9.0",
     "husky": "~7.0.2",
     "jest": "~28.1.1",
