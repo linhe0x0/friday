@@ -1,6 +1,6 @@
+import path from 'path'
 import Router from '@koa/router'
 // eslint-disable-next-line import/no-extraneous-dependencies
-import mock from 'mock-fs'
 import mountApi, {
   ignoredFile,
   fileRoutes,
@@ -9,7 +9,9 @@ import mountApi, {
   toRoutes,
 } from './mount-api'
 
-afterEach(mock.restore)
+const getMockDir = (dir: string): string => {
+  return path.join(__dirname, 'fixtures/api', dir)
+}
 
 describe('ignoreFile', () => {
   test('should ignore the file which starts with .', () => {
@@ -296,21 +298,8 @@ describe('getConflictingFileRoutes', () => {
 })
 
 describe('getRouteFiles', () => {
-  afterEach(mock.restore)
-
   test('should return all matched route files', () => {
-    mock({
-      'dist/app/all-matched/api': {
-        'index.get.js': '',
-        'index.post.js': '',
-        '[id].get.js': '',
-        '[id].put.js': '',
-      },
-      'dist/app/all-matched-2/api/[id].get.js': '',
-    })
-
-    const cwd = process.cwd()
-    const dir = `${cwd}/dist/app`
+    const dir = getMockDir('match')
     const files = getRouteFiles(dir)
 
     expect(files).toEqual([
@@ -324,46 +313,35 @@ describe('getRouteFiles', () => {
 })
 
 describe('toRoutes', () => {
-  afterEach(mock.restore)
-
   test('should return routes when converting valid routes', () => {
-    mock({
-      'dist/app/to-routes-valid/api/index.get.js':
-        'module.exports = function () {}',
-    })
-    const cwd = process.cwd()
-    const dir = `${cwd}/dist/app`
+    const dir = getMockDir('to-routes-valid')
 
     const routes = toRoutes(
       [
         {
-          file: 'to-routes-valid/api/index.get.js',
+          file: 'namespace/api/index.get.js',
           method: 'get',
-          url: '/api/to-routes-valid',
+          url: '/api/namespace',
         },
       ],
       dir
     )
 
     expect(routes[0]!.method).toBe('get')
-    expect(routes[0]!.url).toBe('/api/to-routes-valid')
+    expect(routes[0]!.url).toBe('/api/namespace')
     expect(routes[0]!.schema).toEqual({})
     expect(routes[0]!.middleware).toEqual([])
   })
 
   test('should return null when converting empty route', () => {
-    mock({
-      'dist/app/to-routes-empty/api/index.get.js': '{}',
-    })
-    const cwd = process.cwd()
-    const dir = `${cwd}/dist/app`
+    const dir = getMockDir('to-routes-empty')
 
     const routes = toRoutes(
       [
         {
-          file: 'to-routes-empty/api/index.get.js',
+          file: 'namespace/api/index.get.js',
           method: 'get',
-          url: '/api/to-routes-empty',
+          url: '/api/namespace',
         },
       ],
       dir
@@ -373,21 +351,15 @@ describe('toRoutes', () => {
   })
 
   test('should throw an error when converting invalid route', () => {
-    mock({
-      'dist/app/to-routes-invalid/api/[to-routes-invalid].get.js':
-        'module.exports = { a: 1 }',
-    })
+    const dir = getMockDir('to-routes-invalid')
 
     expect(() => {
-      const cwd = process.cwd()
-      const dir = `${cwd}/dist/app`
-
       toRoutes(
         [
           {
-            file: 'to-routes-invalid/api/[to-routes-invalid].get.js',
+            file: 'namespace/api/[to-routes-invalid].get.js',
             method: 'get',
-            url: '/api/to-routes-invalid/[to-routes-invalid]',
+            url: '/api/namespace/[to-routes-invalid]',
           },
         ],
         dir
@@ -397,55 +369,42 @@ describe('toRoutes', () => {
 })
 
 describe('mountApi', () => {
-  afterEach(mock.restore)
-
   test('should mount routes when with valid data', () => {
-    mock({
-      'dist/app/mount-with-valid-route/api/index.get.js':
-        'module.exports = function () {}',
-    })
+    const dir = getMockDir('mount-with-valid-route')
 
     expect(() => {
       const router = new Router()
-      const useApiRouter = mountApi()
+      const useApiRouter = mountApi(dir)
 
       useApiRouter(router)
     }).not.toThrow()
   })
 
   test('should mount routes when with empty data', () => {
-    mock({
-      'dist/app/mount-with-empty-route/api/index.get.js': 'module.exports = {}',
-    })
+    const dir = getMockDir('mount-with-empty-route')
 
     expect(() => {
       const router = new Router()
-      const useApiRouter = mountApi()
+      const useApiRouter = mountApi(dir)
 
       useApiRouter(router)
     }).not.toThrow()
   })
 
   test('should throw an error when mounting conflict routes', () => {
-    mock({
-      'dist/app/mount-conflict/api/[id].get.js': '',
-      'dist/app/mount-conflict/api/[id]/index.get.js': '',
-    })
+    const dir = getMockDir('mount-conflict')
 
     expect(() => {
-      mountApi()
+      mountApi(dir)
     }).toThrow('conflicts')
   })
 
   test('should throw an error when mounting unsupported routes', () => {
-    mock({
-      'dist/app/unsupported/api/index.unsupported.js':
-        'module.exports = function () {}',
-    })
+    const dir = getMockDir('unsupported')
 
     expect(() => {
       const router = new Router()
-      const useApiRouter = mountApi()
+      const useApiRouter = mountApi(dir)
 
       useApiRouter(router)
     }).toThrow('Unsupported route method')

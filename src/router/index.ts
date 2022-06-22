@@ -8,6 +8,7 @@ import helpfulRouter from './helpful-router'
 import mountApi from './mount-api'
 import mountRouter from './mount-router'
 import outputRoutes from './output-routes'
+import { appDir, rootDir } from '../lib/app-info'
 
 const logger = useLogger('friday:router')
 
@@ -24,12 +25,12 @@ export function mount(app: Koa, options?: Partial<MountOptions>) {
 
   try {
     // Mount user routes from [USER_APP_ROOT_DIR]/app/*/api/**.js.
-    const useApiRouter = mountApi()
+    const useApiRouter = mountApi(appDir)
 
     useApiRouter(router)
 
     // Mount user routes from [USER_APP_ROOT_DIR]/router.js.
-    const useUserRouter = mountRouter()
+    const useUserRouter = mountRouter(rootDir)
 
     useUserRouter(router)
 

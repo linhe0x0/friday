@@ -4,7 +4,6 @@ import path from 'path'
 
 import loader from '../utilities/loader'
 import useLogger from '../utilities/logger'
-import { rootDir } from '../lib/app-info'
 
 interface RouteFn {
   (router: any): any
@@ -12,10 +11,10 @@ interface RouteFn {
 
 const logger = useLogger('friday:router')
 
-export default function mount(): RouteFn {
+export default function mount(dir: string): RouteFn {
   const targetPathList = [
-    path.resolve(rootDir, 'router.js'),
-    path.resolve(rootDir, 'router/index.js'),
+    path.resolve(dir, 'router.js'),
+    path.resolve(dir, 'router/index.js'),
   ]
 
   let routerPath = ''
