@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node: [ 'lts/*', 'latest' ]  # LTS and latest version. https://github.com/nodejs/Release#release-schedule
+        node: ['lts/*', 'latest'] # LTS and latest version. https://github.com/nodejs/Release#release-schedule
     name: test with node@${{ matrix.node }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -45,4 +45,4 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Run test script
-        run: npm run test --if-present
+        run: npx tsc && npm run test --if-present
