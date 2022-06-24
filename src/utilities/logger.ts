@@ -123,9 +123,11 @@ class Logger implements BaseLogger {
     }
 
     if (this.err) {
-      _.assign(options.mergingObject, {
-        error: _.pick(this.err, ['name', 'message', 'stack']),
-      })
+      options.mergingObject.error = _.pick(this.err, [
+        'name',
+        'message',
+        'stack',
+      ])
     }
 
     const fn: pino.LogFn = this.logger[method].bind(this.logger)
