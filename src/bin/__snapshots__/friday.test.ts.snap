@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`friday --help should output help info of start command when called with --help flag. 1`] = `
+"friday start [entry-point]
+
+start a server, as it is the default command
+
+Options:
+      --version  Show version number                                   [boolean]
+      --help     Show help                                             [boolean]
+  -h, --host     specify a host on which to listen                      [string]
+  -p, --port     specify a port on which to listen                      [number]
+  -l, --listen   specify a URI endpoint on which to listen              [string]
+  -e, --env      specify an environment of application and config files [string]"
+`;
+
+exports[`friday --help should output help info with example message when called with --help flag. 1`] = `
+"friday <cmd> [args]
+
+Options:
+      --version  Show version number                                   [boolean]
+      --help     Show help                                             [boolean]
+  -h, --host     specify a host on which to listen                      [string]
+  -p, --port     specify a port on which to listen                      [number]
+  -l, --listen   specify a URI endpoint on which to listen              [string]
+  -e, --env      specify an environment of application and config files [string]
+
+Examples:
+
+    By default, app will be listened on 0.0.0.0:3000 and look first for the
+    \\"main\\" field in package.json and subsequently for app.js as the default
+    entry_point.
+
+    Listen endpoints (specified by the --listen or -l options above) instruct
+    app to listen on the specified interface/port, UNIX domain socket.
+
+    For TCP (traditional host/port) endpoint:
+
+    $ friday -p 1234
+    $ friday -h 127.0.0.1
+    $ friday -l tcp://127.0.0.1:1234
+
+    For UNIX domain socket endpoint:
+
+    $ friday -l unix:/path/to/socket.sock"
+`;
