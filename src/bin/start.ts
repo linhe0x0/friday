@@ -12,10 +12,11 @@ interface StartCommandOptions {
   port?: number | undefined
   listen?: string | undefined
   env?: string | undefined
+  entryPoint?: string | undefined
 }
 
 export default function start(argv: Arguments<StartCommandOptions>): void {
-  const { host, port, listen, env } = argv
+  const { host, port, listen, env, entryPoint } = argv
   const defaultHost = '0.0.0.0'
   const defaultPort = parseInt(process.env.PORT || '3000', 10) || 3000
 
@@ -28,6 +29,11 @@ export default function start(argv: Arguments<StartCommandOptions>): void {
 
   if (!process.env.NODE_ENV) {
     process.env.NODE_ENV = 'production'
+  }
+
+  // If entry_point is specified, make it overwrite the default value.
+  if (entryPoint) {
+    process.env.FRIDAY_ENTRY_POINT = entryPoint
   }
 
   const isHostOrPortProvided = !!(host || port)

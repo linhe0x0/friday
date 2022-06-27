@@ -4,12 +4,11 @@ import yargs from 'yargs'
 
 import start from './start'
 
-// eslint-disable-next-line no-unused-expressions
-yargs
+const bin = yargs
   .scriptName('friday')
   .usage('$0 <cmd> [args]')
   .command(
-    ['start', '$0'],
+    ['start [entry-point]', '$0 [entry-point]'],
     'start a server, as it is the default command',
     {
       host: {
@@ -39,6 +38,10 @@ yargs
   .example(
     '',
     `
+By default, app will be listened on 0.0.0.0:3000 and look first for the "main" field in package.json and subsequently for app.js as the default entry_point.
+
+Listen endpoints (specified by the --listen or -l options above) instruct app to listen on the specified interface/port, UNIX domain socket.
+
   For TCP (traditional host/port) endpoint:
 
     $ friday -p 1234
@@ -49,4 +52,6 @@ yargs
 
     $ friday -l unix:/path/to/socket.sock
 `
-  ).argv
+  )
+
+bin.parse()
