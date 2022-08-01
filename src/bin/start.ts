@@ -7,7 +7,7 @@ import parseEndpoint from '../lib/parse-endpoint'
 import { gracefulShutdown } from '../lib/process'
 import serve, { Endpoint } from '../lib/serve'
 
-interface StartCommandOptions {
+export interface StartCommandOptions {
   host?: string | undefined
   port?: number | undefined
   listen?: string | undefined
