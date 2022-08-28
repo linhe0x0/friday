@@ -17,6 +17,7 @@
     "lint-with-fix": "eslint --ext ts --fix ./src",
     "type-check": "tsc --noEmit",
     "test": "SUPPRESS_NO_CONFIG_WARNING=y jest ./src",
+    "test:tdd": "SUPPRESS_NO_CONFIG_WARNING=y jest --coverage --watch",
     "test:cov": "SUPPRESS_NO_CONFIG_WARNING=y jest --coverage ./src",
     "prepublishOnly": "npm run build",
     "prepare": "husky install"

@@ -2,7 +2,9 @@ import type Koa from 'koa'
 import prettyMilliseconds from 'pretty-ms'
 
 import { getConfigWithDefault } from '../services/config'
-import { pkgInfo } from '../utilities/pkg'
+import { readPkgUp } from '../utilities/pkg'
+
+const { pkgInfo } = readPkgUp()
 
 const info = function info(ctx: Koa.Context): void {
   const uptime = process.uptime()

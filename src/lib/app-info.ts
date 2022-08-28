@@ -1,7 +1,9 @@
-import fs from 'fs'
 import path from 'path'
 
-import { pkgInfo } from '../utilities/pkg'
+import { readPkgUp } from '../utilities/pkg'
+import { existsSync } from '../utilities/fs'
+
+const { pkgInfo } = readPkgUp()
 
 // Look first for the "main" field in package.json and subsequently for app.js
 // as the default entry_point.
@@ -17,7 +19,7 @@ if (entryPoint[0] !== '/') {
   entryPoint = path.resolve(process.cwd(), entryPoint)
 }
 
-if (!fs.existsSync(entryPoint)) {
+if (!existsSync(entryPoint)) {
   console.error(`The file or directory "${entryPoint}" doesn't exist.`)
   process.exit(1)
 }

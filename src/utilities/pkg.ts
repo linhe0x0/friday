@@ -1,26 +1,45 @@
 import path from 'path'
 
-import loader from './loader'
+import { findUp, parseJSON } from './fs'
 
-export const pkgPath = path.resolve(process.cwd(), 'package.json')
+export const pkgUp = (cwd?: string, stopAt?: string): string => {
+  return findUp('package.json', cwd, stopAt)
+}
 
 interface PkgInfo {
-  name: string
-  version: string
-  main: string
+  name?: string
+  version?: string
+  main?: string
 }
 
-let pkg: PkgInfo = {
-  name: '',
-  version: '',
-  main: '',
+interface ReadPkgUp {
+  pkgInfo: PkgInfo
+  pkgPath: string
+  pkgDir: string
 }
 
-try {
-  pkg = loader(pkgPath)
-} catch (err) {
-  console.error(`${pkgPath} is not found.`)
-  process.exit(1)
-}
+export const readPkgUp = (cwd?: string): ReadPkgUp => {
+  const pkgPath = pkgUp(cwd)
 
-export const pkgInfo = pkg
+  if (!pkgPath) {
+    console.error('cannot find package.json.')
+    process.exit(1)
+  }
+
+  const pkgDir = path.dirname(pkgPath)
+
+  let pkgInfo: PkgInfo = {}
+
+  try {
+    pkgInfo = parseJSON<PkgInfo>(pkgPath)
+  } catch (err) {
+    console.error(`cannot parse package.json`)
+    process.exit(1)
+  }
+
+  return {
+    pkgInfo,
+    pkgPath,
+    pkgDir,
+  }
+}

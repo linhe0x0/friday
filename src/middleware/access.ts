@@ -1,14 +1,14 @@
 import type Koa from 'koa'
 
-import { isStaticFile } from '../utilities/fs'
+import { isFileName } from '../utilities/fs'
 
 export default function access(
   ctx: Koa.Context,
   next: Koa.Next
 ): Promise<void> {
-  const staticFile = isStaticFile(ctx.path)
+  const filename = isFileName(ctx.path)
 
-  if (staticFile) {
+  if (filename) {
     // Ignore request of static file by default.
     return next()
   }
