@@ -2,7 +2,7 @@
 
 import yargs from 'yargs'
 
-import start from './start'
+import main from './main'
 
 const bin = yargs
   .scriptName('friday')
@@ -32,7 +32,7 @@ const bin = yargs
         type: 'string',
       },
     },
-    start
+    main
   )
   .help()
   .example(

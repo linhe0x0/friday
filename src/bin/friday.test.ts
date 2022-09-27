@@ -116,6 +116,50 @@ describe('run start command', () => {
   })
 })
 
+describe('run sub command: dev', () => {
+  beforeAll(() => {
+    jest.mock('child_process', () => {
+      return {
+        spawn() {
+          return {
+            stdout: {
+              pipe: jest.fn(),
+            },
+            stderr: {
+              pipe: jest.fn(),
+            },
+            on: jest.fn(),
+          }
+        },
+      }
+    })
+    jest.mock('./start')
+    jest.mock('../lib/command-logger')
+  })
+
+  afterAll(() => {
+    jest.unmock('child_process')
+    jest.unmock('./start')
+    jest.unmock('../lib/command-logger')
+  })
+
+  test('run dev sub command with missing friday-cli package', () => {
+    const logger = require('../lib/command-logger')
+    const exit = jest
+      .spyOn<any, string>(process, 'exit')
+      .mockImplementation(() => {})
+
+    runCommand('dev')
+
+    expect(logger.default.error.mock.calls[0][0]).toBe(
+      'friday-cli is not found. Maybe you forgot to install it?'
+    )
+    expect(exit).toBeCalledWith(1)
+
+    exit.mockRestore()
+  })
+})
+
 // Use the following to make the file a module, because the file cannot be
 // complied under '--isolatedModules' flag without it.
 // eslint-disable-next-line jest/no-export
